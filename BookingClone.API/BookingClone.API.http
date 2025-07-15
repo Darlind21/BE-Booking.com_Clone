@@ -1,0 +1,6 @@
+@BookingClone.API_HostAddress = http://localhost:5103
+
+GET {{BookingClone.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
