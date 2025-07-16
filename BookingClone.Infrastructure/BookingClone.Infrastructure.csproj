@@ -15,4 +15,15 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Configurations\" />
+    <Folder Include="Services\" />
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BookingClone.Application\BookingClone.Application.csproj" />
+    <ProjectReference Include="..\BookingClone.Domain\BookingClone.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
