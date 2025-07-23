@@ -17,5 +17,6 @@ namespace BookingClone.Infrastructure.Data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Owner> Owners { get; set; }
+
     }
 }

@@ -10,13 +10,35 @@ namespace BookingClone.Domain.Entities
     public class User
     {
         [Key]
-        public Guid Id { get; set; }
-        public string FirstName { get; set; } = null!;
-        public string LastName { get; set; } = null!;
-        public string Email { get; set; } = null!;
-        public string Password { get; set; } = null!;
-        public string? Country { get; set; }
+        public Guid Id { get; private set; }
+        public string FirstName { get; private set; } = null!;
+        public string LastName { get; private set; } = null!;
+
+        [EmailAddress]
+        public string Email { get; private set; } = null!;
+        public string PasswordHash { get; private set; } = null!;
+        public string? Country { get; private set; }
         public DateTime CreatedOnUtc { get; init; } = DateTime.UtcNow;
-        public DateTime? UpdatedOnUtc { get; set; }
+        public DateTime? UpdatedOnUtc { get; private set; }
+
+        public User()
+        {
+            // Parameterless constructor for EF Core
+        }
+
+        public User(string firstName, string lastName, string email, string passwordHash, string? country = null)
+        {
+            if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentException("First name is required");
+            if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentException("Last name is required");
+            if (string.IsNullOrWhiteSpace(email) || !email.Contains("@")) throw new ArgumentException("Invalid email");
+            if (string.IsNullOrWhiteSpace(passwordHash) || passwordHash.Length < 8) throw new ArgumentException("Invalid password hash");
+
+            Id = Guid.NewGuid();
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+            PasswordHash = passwordHash;
+            Country = country;
+        }
     }
 }

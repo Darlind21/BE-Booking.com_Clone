@@ -47,10 +47,6 @@ namespace BookingClone.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Amenities")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<decimal>("CleaningFee")
                         .HasColumnType("decimal(18,2)");
 
@@ -116,6 +112,9 @@ namespace BookingClone.Infrastructure.Migrations
                     b.Property<Guid>("ApartmentId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("CancelledOnUtc")
+                        .HasColumnType("datetime2");
+
                     b.Property<decimal>("CleaningFee")
                         .HasColumnType("decimal(18,2)");
 
@@ -177,8 +176,9 @@ namespace BookingClone.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PhoneNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -205,8 +205,8 @@ namespace BookingClone.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("RatingOutOfTen")
-                        .HasColumnType("int");
+                    b.Property<byte>("RatingOutOfTen")
+                        .HasColumnType("tinyint");
 
                     b.HasKey("Id");
 
@@ -239,7 +239,7 @@ namespace BookingClone.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
