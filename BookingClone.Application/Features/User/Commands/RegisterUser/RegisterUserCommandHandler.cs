@@ -1,5 +1,8 @@
-﻿using BookingClone.Application.Interfaces.Repositories;
+﻿using BookingClone.Application.Common.DTOs;
+using BookingClone.Application.Interfaces.Repositories;
+using BookingClone.Application.Interfaces.Services;
 using BookingClone.Domain.Entities;
+using FluentResults;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -9,18 +12,22 @@ using System.Threading.Tasks;
 
 namespace BookingClone.Application.Features.User.Commands.RegisterUser
 {
-    public class RegisterUserCommandHandler(IUserRepository userRepository) : IRequestHandler<RegisterUserCommand, Guid>
+    public class RegisterUserCommandHandler(IUserRepository userRepository, ITokenService tokenService) : IRequestHandler<RegisterUserCommand, Result<AuthenticatedUserDTO>>
     {
 
-        public async Task<Guid> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result<AuthenticatedUserDTO>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+            //A CancellationToken is like having an "emergency stop" btn for request processing... it is a way to ask the handler to stop working if the request is no longer needed
+            // i.e. - user closed their browser tab - request timeout - app shutdown etc
         {
             var dto = request.RegisterUserDTO;
 
             var existingUser = await userRepository.GetUserByEmailAsync(dto.Email);
-            if (existingUser != null)
-                throw new InvalidOperationException("User with this email already exists");
+            if (existingUser != null) return Result.Fail("User with this email already exists");
 
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+            //Uses the BCrypt alogrithm, which is a password-specific hashing function designed to be slow and resistant to brute force
+            //It automatically generates a random salt for each password and appends the salt into tghe final hash, so we do not need to store it seperately
+            //We dont deal manually with salt or keys - just storing the final hash string.
 
             var user = new Domain.Entities.User(
                 dto.FirstName,
@@ -31,8 +38,13 @@ namespace BookingClone.Application.Features.User.Commands.RegisterUser
             );
 
             var created = await userRepository.AddAsync(user);
+            if (!created) throw new ArgumentException("Unable to register new user");
 
-            return user.Id;
+            return new AuthenticatedUserDTO
+            {
+                Email = user.Email,
+                Token = tokenService.GenerateToken(user)
+            };
         }
     }
 }

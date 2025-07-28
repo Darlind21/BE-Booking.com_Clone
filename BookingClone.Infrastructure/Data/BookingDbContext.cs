@@ -18,5 +18,23 @@ namespace BookingClone.Infrastructure.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Owner> Owners { get; set; }
 
+
+
+        //to apply our configuration classes that implement IEntityTypeConfiguration<T> we can do it on OnModelCreating()
+        //we can either apply them all at once using "modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);"
+        //or one by one using "modelBuilder.ApplyConfiguration(new TConfiguration());"
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            //The line below tells EF Core "Scan the assembly where DbContext lives (because thats also where my configuration classes live) and apply all classes that implement IEntityTypeConfiguration<T>"
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(BookingDbContext).Assembly); //since we do not use an instance of BookingDbContext we use typeof to get its type.
+            //1.Uses typeof(DbContext) to find the type
+            //2.Uses.Assemnly to ge the assembly(DLL) where that type lives -- Assembly is the compiled version of the project the code lives on
+            //3.Scans that assembly for all entity configurations and applies them 
+
+            //typeof - C# keyword that gets the Type object (blueprint info) for a class 
+            //i.e. Type t = typeof(string);
+            //Console.WriteLine(t.FullName); prints System.String
+        }
+
     }
 }

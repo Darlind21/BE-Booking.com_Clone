@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BookingClone.Application.Features.User.Commands.RegisterUser
 {
-    public record RegisterUserDTO //Review:
+    public record RegisterUserDTO //REVIEW:
     {
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;

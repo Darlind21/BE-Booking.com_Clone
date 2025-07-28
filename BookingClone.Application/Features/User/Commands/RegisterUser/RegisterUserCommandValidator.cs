@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 namespace BookingClone.Application.Features.User.Commands.RegisterUser
 {
     public class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
+    //AbstractValidator<T> is a class provided by FluentValidation library to validate objects in a clean, readable and reusable way 
+    //Main benefit it offers - it keeps validation logic seperate from business logic 
     {
         public RegisterUserCommandValidator()
         {

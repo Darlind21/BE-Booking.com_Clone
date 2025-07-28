@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\BookingClone.Application\BookingClone.Application.csproj" />
     <ProjectReference Include="..\BookingClone.Domain\BookingClone.Domain.csproj" />
   </ItemGroup>
