@@ -1,5 +1,4 @@
 ﻿using BookingClone.Application.Features.User.Commands.LoginUser;
-using BookingClone.Application.Features.User.Commands.LoginUser.DTOs;
 using BookingClone.Application.Features.User.Commands.RegisterUser;
 using MediatR;
 using Microsoft.AspNetCore.Http;

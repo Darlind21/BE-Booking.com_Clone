@@ -1,5 +1,4 @@
 using BookingClone.API.Extensions;
-using BookingClone.API.Middleware;
 using BookingClone.Infrastructure.Extensions;
 
 

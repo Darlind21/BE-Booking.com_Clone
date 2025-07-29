@@ -1,5 +1,4 @@
 ﻿using BookingClone.Application.Common.DTOs;
-using BookingClone.Application.Features.User.Commands.LoginUser.DTOs;
 using FluentResults;
 using MediatR;
 using System;

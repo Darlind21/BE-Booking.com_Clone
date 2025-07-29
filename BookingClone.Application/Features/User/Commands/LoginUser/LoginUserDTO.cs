@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookingClone.Application.Features.User.Commands.LoginUser.DTOs
+namespace BookingClone.Application.Features.User.Commands.LoginUser
 {
     public record LoginUserDTO
     {

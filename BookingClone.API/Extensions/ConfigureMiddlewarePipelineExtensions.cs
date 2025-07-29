@@ -1,6 +1,8 @@
-﻿namespace BookingClone.API.Middleware
+﻿using BookingClone.API.Middleware;
+
+namespace BookingClone.API.Extensions
 {
-    public static class ConfigureMiddlewarePipeline
+    public static class ConfigureMiddlewarePipelineExtensions
     {
         public static WebApplication UseApiRequestPipeline(this WebApplication app)
         {
@@ -12,7 +14,8 @@
 
             app.UseHttpsRedirection();
 
-            //app.UseCustomExceptionMiddleware();
+            //custom global error handling middleware 
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseAuthentication();
 

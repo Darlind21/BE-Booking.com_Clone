@@ -15,7 +15,7 @@ namespace BookingClone.Infrastructure.Repositories
 
         public virtual async Task<bool> DeleteByIdAsync(Guid id)
         {
-            var entity = await GetByIdAsync(id); // Await the task to get the actual entity
+            var entity = await GetByIdAsync(id);
 
             if (entity != null)
             {
