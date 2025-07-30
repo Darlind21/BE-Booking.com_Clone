@@ -9,6 +9,7 @@ builder.Services
     .AddApiServices()
     .AddInfrastructure(builder.Configuration)
     .ConfigureJwt()
+    .AddJwtAuthentication(builder.Configuration)
     .AddApplicationServices();
 
 
