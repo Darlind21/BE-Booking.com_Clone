@@ -1,4 +1,5 @@
 ﻿using BookingClone.API.Helpers;
+using FluentValidation;
 using System.Net;
 using System.Text.Json;
 
@@ -36,9 +37,31 @@ namespace BookingClone.API.Middleware
 
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-                var response = env.IsDevelopment()
-                    ? new ApiException(context.Response.StatusCode, ex.Message, ex.StackTrace)
-                    : new ApiException(context.Response.StatusCode, ex.Message, "An unexpected error has occured");
+                ApiException response;
+                 
+                if (ex is ValidationException validationException) //if the error is a fluent validation error
+                    //this is pattern matching
+                    //we are saying "If ex is a ValidationException cast it to validationException",
+                    //so we can use it inside the block 
+                {
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    var errors = validationException.Errors
+                        .Where(e => e != null)
+                        .Select(e => e.ErrorMessage)
+                        .ToList();
+
+                    response = new ApiException(
+                        statusCode : context.Response.StatusCode,
+                        message: "Validation failed!",
+                        errors: errors
+                    );
+                }
+                else
+                {
+                    response = env.IsDevelopment()
+                        ? new ApiException(context.Response.StatusCode, ex.Message, details: ex.StackTrace)
+                        : new ApiException(context.Response.StatusCode, ex.Message, details: "An unexpected error has occured");
+                }
 
                 var options = new JsonSerializerOptions
                 {
