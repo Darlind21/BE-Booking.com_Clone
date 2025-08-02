@@ -9,8 +9,9 @@ namespace BookingClone.Application.Interfaces.Repositories
 {
     public interface IOwnerRepository : IBaseRepository<Owner>
     {
-        Task<bool> BankAccountExists(string bankAccount);
-        Task<bool> IdCardNumberExists(string idCardNumber);
-        Task<bool> PhoneNumberExists(string phoneNumber);
+        Task<bool> BankAccountExistsAsync(string bankAccount);
+        Task<bool> IdCardNumberExistsAsync(string idCardNumber);
+        Task<bool> PhoneNumberExistsAsync(string phoneNumber);
+        Task<Owner?> GetOwnerByUserIdAsync(Guid userId);
     }
 }

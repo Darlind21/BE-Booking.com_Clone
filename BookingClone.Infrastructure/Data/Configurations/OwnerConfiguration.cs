@@ -15,6 +15,12 @@ namespace BookingClone.Infrastructure.Data.Configurations
         {
             builder.HasIndex(o => o.IdCardNumber)
                 .IsUnique();
+
+            builder.HasIndex(o => o.BankAccount)
+                .IsUnique();
+
+            builder.HasIndex(o => o.PhoneNumber)
+                .IsUnique();
         }
     }
 }

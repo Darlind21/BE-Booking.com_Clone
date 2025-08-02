@@ -2,6 +2,7 @@
 using BookingClone.Application.Features.Owner.Commands.RegisterOwner;
 using BookingClone.Application.Features.User.Commands.LoginUser;
 using BookingClone.Application.Features.User.Commands.RegisterUser;
+using BookingClone.Application.Features.User.Queries.GetUserProfile;
 using BookingClone.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -55,6 +56,18 @@ namespace BookingClone.API.Controllers
         public IActionResult TestOwner()
         {
             return Ok();
+        }
+
+        [Authorize]
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetUserProfile()
+        {
+            var userId = User.GetUserId();
+            var query = new GetUserProfileQuery { UserId = userId };
+
+            var result = await _sender.Send(query);
+
+            return result.ToIActionResult();
         }
     }
 }

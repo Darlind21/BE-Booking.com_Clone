@@ -27,11 +27,11 @@ namespace BookingClone.Application.Features.Owner.Commands.RegisterOwner
 
                 if (await userRepository.IsUserAnOwnerAsync(dto.ExistingUserId)) return Result.Fail("User is already owner");
 
-                if (await ownerRepository.BankAccountExists(dto.BankAccount)) return Result.Fail("An owner with this bank account already exists");
+                if (await ownerRepository.BankAccountExistsAsync(dto.BankAccount)) return Result.Fail("An owner with this bank account already exists");
 
-                if (await ownerRepository.IdCardNumberExists(dto.IdCardNumber)) return Result.Fail("An owner with this id card number already exists");
+                if (await ownerRepository.IdCardNumberExistsAsync(dto.IdCardNumber)) return Result.Fail("An owner with this id card number already exists");
 
-                if (await ownerRepository.PhoneNumberExists(dto.PhoneNumber)) return Result.Fail("An owner with this phone number already exists");
+                if (await ownerRepository.PhoneNumberExistsAsync(dto.PhoneNumber)) return Result.Fail("An owner with this phone number already exists");
 
                 var newOwner = new Domain.Entities.Owner(dto.IdCardNumber, dto.BankAccount, dto.PhoneNumber, dto.ExistingUserId);
 

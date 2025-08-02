@@ -25,6 +25,8 @@ namespace BookingClone.Domain.Entities
         private readonly List<Review> _reviews = [];
         public IReadOnlyCollection<Review> Reviews => _reviews.AsReadOnly();
 
+        //FIX: Add Bookings List
+
         public User()
         {
             // Parameterless constructor for EF Core

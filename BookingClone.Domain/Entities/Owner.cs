@@ -12,9 +12,9 @@ namespace BookingClone.Domain.Entities
     {
         [Key]
         public Guid Id { get; private set; }
-        public string IdCardNumber { get; set; } = null!;
-        public string BankAccount { get; set; } = null!;
-        public string PhoneNumber { get; set; } = null!;
+        public string IdCardNumber { get; private set; } = null!;
+        public string BankAccount { get; private set; } = null!;
+        public string PhoneNumber { get; private set; } = null!;
 
 
         [ForeignKey(nameof(User))]
