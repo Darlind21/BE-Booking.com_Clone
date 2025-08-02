@@ -19,5 +19,11 @@ namespace BookingClone.Infrastructure.Repositories
             return await context.Users
                 .SingleOrDefaultAsync(u => u.Email == email);
         }
+
+        public async Task<bool> IsUserAnOwnerAsync(Guid userId)
+        {
+            return await context.Owners
+                .AnyAsync(o => o.UserId == userId);
+        }
     }
 }

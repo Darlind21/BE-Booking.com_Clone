@@ -21,6 +21,11 @@ namespace BookingClone.Domain.Entities
         public Guid BookingId { get; private set; }
         public Booking Booking { get; private set; } = null!; // EF Core will initialize this property when loading data from the database
 
+
+        [ForeignKey(nameof(User))]
+        public Guid? UserId { get; private set; }
+        public User? User { get; set; }
+
         public Review()
         {
             // Parameterless constructor for EF Core

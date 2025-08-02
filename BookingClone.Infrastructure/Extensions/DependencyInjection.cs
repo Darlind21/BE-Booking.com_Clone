@@ -24,6 +24,7 @@ namespace BookingClone.Infrastructure.Extensions
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IOwnerRepository, OwnerRepository>();
             
 
 

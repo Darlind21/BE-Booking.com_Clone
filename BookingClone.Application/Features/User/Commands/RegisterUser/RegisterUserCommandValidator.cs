@@ -29,7 +29,7 @@ namespace BookingClone.Application.Features.User.Commands.RegisterUser
             RuleFor(x => x.RegisterUserDTO.Email)
                 .NotEmpty().WithMessage("Email is required")
                 .EmailAddress().WithMessage("Email is invalid")
-                .MinimumLength(5).WithMessage("Minimum length for email is 5 chars")   
+                .MinimumLength(5).WithMessage("Minimum length for email is 5 chars")
                 .MaximumLength(250).WithMessage("Maximum length for email is 250 chars");
 
 

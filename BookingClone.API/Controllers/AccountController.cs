@@ -1,6 +1,10 @@
-﻿using BookingClone.Application.Features.User.Commands.LoginUser;
+﻿using BookingClone.API.Extensions;
+using BookingClone.Application.Features.Owner.Commands.RegisterOwner;
+using BookingClone.Application.Features.User.Commands.LoginUser;
 using BookingClone.Application.Features.User.Commands.RegisterUser;
+using BookingClone.Domain.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,16 +19,17 @@ namespace BookingClone.API.Controllers
 
             var result = await _sender.Send(command);
 
-            if (result.IsFailed) return BadRequest(new
-            {
-                Errors = result.Errors.Select(x => x.Message)
-            });
-            //we do not do return BadRequest(result.Errors) because to make it more client-friendly
-            //the raw result.Errors - contains complex internal objs 
-            //                      - may include metadata, stack traces or internal reasons
-            //                      -is often not serialized cleanly/clearly in JSON
+            return result.ToIActionResult();
+        }
 
-            return Ok(result.Value);
+        [HttpPost("owner/register")]
+        public async Task<IActionResult> RegisterOwner([FromBody] RegisterOwnerDTO registerOwnerDTO)
+        {
+            var command = new RegisterOwnerCommand { RegisterOwnerDTO = registerOwnerDTO };
+
+            var result = await _sender.Send(command);
+
+            return result.ToIActionResult();
         }
 
         [HttpPost("login")]
@@ -34,12 +39,22 @@ namespace BookingClone.API.Controllers
 
             var result = await _sender.Send(command);
 
-            if (result.IsFailed) return BadRequest(new
-            {
-                Errors = result.Errors.Select(x => x.Message)
-            });
+            return result.ToIActionResult();
+        }
 
-            return Ok(result.Value);
+
+        [Authorize]
+        [HttpGet("test-authorization")]
+        public IActionResult Test()
+        {
+            return Ok();
+        }
+
+        [Authorize(Roles = nameof(AppRole.Owner))]
+        [HttpGet("test-owner-authorization")]
+        public IActionResult TestOwner()
+        {
+            return Ok();
         }
     }
 }

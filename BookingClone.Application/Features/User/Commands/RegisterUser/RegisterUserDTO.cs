@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace BookingClone.Application.Features.User.Commands.RegisterUser
 {
-    public record RegisterUserDTO //REVIEW:
+    public record RegisterUserDTO
     {
-        public string FirstName { get; set; } = null!;
-        public string LastName { get; set; } = null!;
-        public string Email { get; set; } = null!;
-        public string Password { get; set; } = null!;
-        public string? Country { get; set; }
+        public string FirstName { get; init; } = null!;
+        public string LastName { get; init; } = null!;
+        public string Email { get; init; } = null!;
+        public string Password { get; init; } = null!;
+        public string? Country { get; init; }
     }
 }

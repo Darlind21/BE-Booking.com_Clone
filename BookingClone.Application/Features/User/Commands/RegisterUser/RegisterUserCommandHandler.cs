@@ -21,8 +21,8 @@ namespace BookingClone.Application.Features.User.Commands.RegisterUser
         {
             var dto = request.RegisterUserDTO;
 
-            var existingUser = await userRepository.GetUserByEmailAsync(dto.Email);
-            if (existingUser != null) return Result.Fail("User with this email already exists");
+            var existingUser = await userRepository.ExistsAsync(x => x.Email == dto.Email); //returning Fluent Results for business logic validations
+            if (existingUser) return Result.Fail("User with this email already exists");
 
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
             //Uses the BCrypt alogrithm, which is a password-specific hashing function designed to be slow and resistant to brute force
@@ -38,12 +38,14 @@ namespace BookingClone.Application.Features.User.Commands.RegisterUser
             );
 
             var created = await userRepository.AddAsync(user);
-            if (!created) throw new ArgumentException("Unable to register new user");
+            if (!created) throw new Exception("Unable to create new user");
 
-            return new AuthenticatedUserDTO
+            return new AuthenticatedUserDTO //if we'd be using older fluentResults versions we'd have to wrap it in Results.Ok(new ... {})
             {
+                UserId = user.Id,
+                FirstName = user.FirstName,
                 Email = user.Email,
-                Token = tokenService.GenerateToken(user)
+                Token = tokenService.GenerateToken(user, Domain.Enums.AppRole.User)
             };
         }
     }

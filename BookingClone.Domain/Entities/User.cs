@@ -21,6 +21,10 @@ namespace BookingClone.Domain.Entities
         public DateTime CreatedOnUtc { get; init; } = DateTime.UtcNow;
         public DateTime? UpdatedOnUtc { get; private set; }
 
+
+        private readonly List<Review> _reviews = [];
+        public IReadOnlyCollection<Review> Reviews => _reviews.AsReadOnly();
+
         public User()
         {
             // Parameterless constructor for EF Core

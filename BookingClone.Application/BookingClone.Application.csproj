@@ -7,10 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Booking\" />
-    <Folder Include="Features\Apartment\" />
-    <Folder Include="Features\ApartmentPhoto\" />
-    <Folder Include="Features\User\Queries\" />
+    <Folder Include="Features\Apartment\Commands\Photos\" />
+    <Folder Include="Features\Apartment\Queries\Photos\" />
+    <Folder Include="Features\Booking\Commands\" />
+    <Folder Include="Features\Booking\Queries\" />
+    <Folder Include="Features\Owner\Queries\" />
   </ItemGroup>
 
   <ItemGroup>

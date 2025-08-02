@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BookingClone.Application.Features.User.Commands.LoginUser
 {
-    public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
+    public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand> //implements IValidator
     {
         public LoginUserCommandValidator()
         {

@@ -28,8 +28,11 @@ namespace BookingClone.Application.Features.User.Commands.LoginUser
 
             return new AuthenticatedUserDTO
             {
+                UserId = user.Id,
+                FirstName = user.FirstName,
                 Email = user.Email,
-                Token = tokenService.GenerateToken(user)
+                Token = tokenService.GenerateToken(
+                    user, await userRepository.IsUserAnOwnerAsync(user.Id) ? Domain.Enums.AppRole.Owner : Domain.Enums.AppRole.User)
             };
         }
     }

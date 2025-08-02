@@ -8,7 +8,7 @@ namespace BookingClone.Application.Features.User.Commands.LoginUser
 {
     public record LoginUserDTO
     {
-        public string Email { get; set; } = null!;
-        public string Password { get; set; } = null!;
+        public string Email { get; init; } = null!;
+        public string Password { get; init; } = null!;
     }
 }

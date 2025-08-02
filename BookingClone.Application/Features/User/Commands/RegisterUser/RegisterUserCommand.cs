@@ -17,7 +17,7 @@ namespace BookingClone.Application.Features.User.Commands.RegisterUser
         //Result<T> provides a clean way to handle operation results without relying on exceptions for control flow
         //Rsult<T> represents the outcome of an operation that either -Succeeds(and returns T) or Fails (and carries one or more error messages)
     {
-        public RegisterUserDTO RegisterUserDTO { get; set; } = default!;
+        public RegisterUserDTO RegisterUserDTO { get; init; } = default!;
         //
     }
 }

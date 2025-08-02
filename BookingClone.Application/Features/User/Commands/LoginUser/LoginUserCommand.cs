@@ -11,6 +11,6 @@ namespace BookingClone.Application.Features.User.Commands.LoginUser
 {
     public record LoginUserCommand : IRequest<Result<AuthenticatedUserDTO>>
     {
-        public LoginUserDTO LoginUserDTO { get; set; } = default!;
+        public LoginUserDTO LoginUserDTO { get; init; } = default!;
     }
 }

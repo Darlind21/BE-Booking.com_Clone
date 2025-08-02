@@ -31,6 +31,11 @@ namespace BookingClone.Infrastructure.Data.Configurations
 
             builder.Property(u => u.Country)
                 .HasMaxLength(100);
+
+            builder
+                .HasMany(u => u.Reviews)
+                .WithOne(r => r.User)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }

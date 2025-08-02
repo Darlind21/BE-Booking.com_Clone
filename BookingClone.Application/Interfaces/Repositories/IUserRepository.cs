@@ -10,5 +10,6 @@ namespace BookingClone.Application.Interfaces.Repositories
     public interface IUserRepository : IBaseRepository<User>
     {
         Task<User?> GetUserByEmailAsync(string email);
+        Task<bool> IsUserAnOwnerAsync(Guid userId);
     }
 }
