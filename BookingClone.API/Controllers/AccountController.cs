@@ -1,7 +1,9 @@
 ﻿using BookingClone.API.Extensions;
 using BookingClone.Application.Features.Owner.Commands.RegisterOwner;
+using BookingClone.Application.Features.User.Commands.DeleteUserProfile;
 using BookingClone.Application.Features.User.Commands.LoginUser;
 using BookingClone.Application.Features.User.Commands.RegisterUser;
+using BookingClone.Application.Features.User.Commands.UpdateUserProfile;
 using BookingClone.Application.Features.User.Queries.GetUserProfile;
 using BookingClone.Domain.Enums;
 using MediatR;
@@ -23,6 +25,7 @@ namespace BookingClone.API.Controllers
             return result.ToIActionResult();
         }
 
+
         [HttpPost("owner/register")]
         public async Task<IActionResult> RegisterOwner([FromBody] RegisterOwnerDTO registerOwnerDTO)
         {
@@ -32,6 +35,7 @@ namespace BookingClone.API.Controllers
 
             return result.ToIActionResult();
         }
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserDTO loginUserDTO)
@@ -51,12 +55,14 @@ namespace BookingClone.API.Controllers
             return Ok();
         }
 
+
         [Authorize(Roles = nameof(AppRole.Owner))]
         [HttpGet("test-owner-authorization")]
         public IActionResult TestOwner()
         {
             return Ok();
         }
+
 
         [Authorize]
         [HttpGet("profile")]
@@ -69,5 +75,30 @@ namespace BookingClone.API.Controllers
 
             return result.ToIActionResult();
         }
+
+
+        [Authorize]
+        [HttpPut("profile/edit")]
+        public async Task<IActionResult> UpdateUserProfile([FromBody] UpdateUserProfileDTO updateUserProfileDTO)
+        {
+            var command = new UpdateUserProfileCommand { UpdateUserProfileDTO = updateUserProfileDTO };
+
+            var result = await _sender.Send(command);
+
+            return result.ToIActionResult();
+        }
+
+
+        //[Authorize]
+        //[HttpDelete("profile/delete")]
+        //public async Task<IActionResult> DeleteUserProfile()
+        //{
+        //    var userId = User.GetUserId();
+        //    var command = new DeleteUserProfileCommand { UserId = userId };
+
+        //    var result = await _sender.Send(command);
+        //    return result.ToIActionResult();
+        //}
+
     }
 }

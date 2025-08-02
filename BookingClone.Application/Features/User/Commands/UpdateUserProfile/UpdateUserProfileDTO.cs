@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BookingClone.Application.Features.User.Commands.UpdateUserProfile
+{
+    public record UpdateUserProfileDTO
+    {
+        public Guid UserId { get; init; }
+        public string? FirstName { get; init; } 
+        public string? LastName { get; init; } 
+        public string? Email { get; init; } 
+        public string? Country { get; init; }
+    }
+}

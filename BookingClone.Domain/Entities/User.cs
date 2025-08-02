@@ -37,7 +37,7 @@ namespace BookingClone.Domain.Entities
             if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentException("First name is required");
             if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentException("Last name is required");
             if (string.IsNullOrWhiteSpace(email) || !email.Contains("@")) throw new ArgumentException("Invalid email");
-            if (string.IsNullOrWhiteSpace(passwordHash) || passwordHash.Length < 8) throw new ArgumentException("Invalid password hash");
+            if (string.IsNullOrWhiteSpace(passwordHash)) throw new ArgumentException("Invalid password hash");
 
             Id = Guid.NewGuid();
             FirstName = firstName;
@@ -45,6 +45,33 @@ namespace BookingClone.Domain.Entities
             Email = email;
             PasswordHash = passwordHash;
             Country = country;
+        }
+
+        public void UpdateFirstName(string firstName)
+        {
+            if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentException("First name is required");
+            FirstName = firstName;
+        }
+
+        public void UpdateLastName(string lastName)
+        {
+            if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentException("Last Name is required");
+        }
+
+        public void UpdateEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email) || !email.Contains("@")) throw new ArgumentException("Invalid email");
+            Email = email;
+        }
+
+        public void UpdateCountry(string? country)
+        {
+            Country = country;
+        }
+
+        public void UpdateUpdatedOnUtc()
+        {
+            UpdatedOnUtc = DateTime.UtcNow;
         }
     }
 }
