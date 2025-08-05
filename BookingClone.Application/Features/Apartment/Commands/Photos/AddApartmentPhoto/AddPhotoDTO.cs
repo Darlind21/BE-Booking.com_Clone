@@ -10,6 +10,6 @@ namespace BookingClone.Application.Features.Apartment.Commands.Photos.AddApartme
     public record AddPhotoDTO
     {
         public Guid ApartmentId { get; init; }
-        public List<IFormFile> ApartmentPhotos { get; init; } = new(5); //User can only upload only 5 photos per request to avoid hitting request timeouts and size limiits
+        public List<IFormFile> ApartmentPhotos { get; init; } = []; 
     }
 }

@@ -32,7 +32,9 @@ namespace BookingClone.Application.Features.Apartment.Commands.Photos.AddApartme
 
                 var photo = new ApartmentPhoto(uploadresult.Value.Url, uploadresult.Value.PublicId, dto.ApartmentId);
 
-                await photoRepository.AddAsync(photo);
+                var added = await photoRepository.AddAsync(photo);
+                if (!added) throw new Exception("Unable to add new photo/s for apartment");
+
 
                 response.Add(new PhotoResponseDTO
                 {

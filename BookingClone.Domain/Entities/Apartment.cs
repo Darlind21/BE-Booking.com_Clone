@@ -21,15 +21,11 @@ namespace BookingClone.Domain.Entities
 
         public List<Amenity> Amenities { get; private set; } = new (20); //An apartment can have at maximum 20 amenities
 
-
         public List<ApartmentPhoto> ApartmentPhotos { get; private set; } = [];
-
 
         public List<Owner> Owners { get; private set; } = [];
 
-
-        private readonly List<Booking> _bookings= [];
-        public IReadOnlyCollection<Booking> Bookings => _bookings.AsReadOnly();
+        public List<Booking> Bookings { get; private set; } = [];
 
         public Apartment()
         {

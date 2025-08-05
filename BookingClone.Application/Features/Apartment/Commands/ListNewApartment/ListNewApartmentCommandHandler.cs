@@ -14,9 +14,9 @@ namespace BookingClone.Application.Features.Apartment.Commands.ListNewApartment
 {
     public class ListNewApartmentCommandHandler
         (IApartmentRepository apartmentRepository, ICloudinaryService cloudinaryService, IOwnerRepository ownerRepository)
-        : IRequestHandler<ListNewApartmentCommand, Result<Guid>>
+        : IRequestHandler<ListNewApartmentCommand, Result<ListNewApartmentResponseDTO>>
     {
-        public async Task<Result<Guid>> Handle(ListNewApartmentCommand request, CancellationToken cancellationToken)
+        public async Task<Result<ListNewApartmentResponseDTO>> Handle(ListNewApartmentCommand request, CancellationToken cancellationToken)
         {
             var dto = request.ListNewApartmentDTO;
 
@@ -26,8 +26,6 @@ namespace BookingClone.Application.Features.Apartment.Commands.ListNewApartment
 
             var owner = await ownerRepository.GetOwnerByUserIdAsync(dto.UserId);
             if (owner == null) return Result.Fail("Owner with this user id does not exist to lsit new apartment");
-
-            if (dto.ApartmentPhotos.Count == 0) return Result.Fail("At least one photo is required to list new apartment");
 
             var newApartment = new Domain.Entities.Apartment(dto.Name, dto.Address, dto.PricePerDay, dto.Description, dto.CleaningFee);
             newApartment.Owners.Add(owner);
@@ -44,9 +42,19 @@ namespace BookingClone.Application.Features.Apartment.Commands.ListNewApartment
 
             foreach (var amenity in dto.Amenities) newApartment.Amenities.Add( new Amenity (amenity)); //it is allowed if the owner does not want to add any amenities
 
-            await apartmentRepository.AddAsync(newApartment);
+            var added = await apartmentRepository.AddAsync(newApartment);
+            if (!added) throw new Exception("Unable to add new apartment listing");
 
-            return newApartment.Id;
+            return new ListNewApartmentResponseDTO
+            {
+                ApartmentId = newApartment.Id,
+                Name = newApartment.Name,
+                Address = newApartment.Address,
+                PricePerDay = newApartment.PricePerDay,
+                Description = newApartment.Description,
+                CleaningFee = newApartment.CleaningFee,
+                Amenities = dto.Amenities,
+            };
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BookingClone.Application.Features.Apartment.Commands.ListNewApartment
 {
-    public record ListNewApartmentCommand : IRequest<Result<Guid>>
+    public record ListNewApartmentCommand : IRequest<Result<ListNewApartmentResponseDTO>>
     {
         public ListNewApartmentDTO ListNewApartmentDTO { get; init; } = default!;
     }
