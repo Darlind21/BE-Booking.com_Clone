@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace BookingClone.Application.Features.Owner.Commands.RegisterOwner
 {
-    public record RegisterOwnerCommand : IRequest<Result<AuthenticatedUserDTO>>
+    public record RegisterNewUserAsOwnerCommand : IRequest<Result<AuthenticatedUserDTO>>
     {
-        public RegisterOwnerDTO RegisterOwnerDTO { get; init; } = default!;
+        public RegisterNewUserAsOwnerDTO RegisterNewUserAsOwnerDTO { get; init; } = default!;
     }
 }

@@ -18,8 +18,8 @@ namespace BookingClone.Domain.Entities
 
 
         [ForeignKey(nameof(User))]
-        public Guid UserId { get; set; }
-        public User User { get; set; } = null!;
+        public Guid UserId { get; private set; }
+        public User User { get; private set; } = null!;
 
         private readonly List<Apartment> _apartments = [];
         public IReadOnlyCollection<Apartment> Apartments => _apartments.AsReadOnly();
@@ -42,6 +42,11 @@ namespace BookingClone.Domain.Entities
             PhoneNumber = phoneNumber;
 
             UserId = userId;
+        }
+
+        public void SetUser(User user)
+        {
+            User = user;
         }
     }
 }

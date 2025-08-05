@@ -1,5 +1,6 @@
 ﻿using BookingClone.API.Extensions;
 using BookingClone.Application.Features.Owner.Commands.RegisterOwner;
+using BookingClone.Application.Features.Owner.Commands.RegisterUserAsOwner;
 using BookingClone.Application.Features.User.Commands.DeleteUserProfile;
 using BookingClone.Application.Features.User.Commands.LoginUser;
 using BookingClone.Application.Features.User.Commands.RegisterUser;
@@ -26,10 +27,12 @@ namespace BookingClone.API.Controllers
         }
 
 
-        [HttpPost("owner/register")]
-        public async Task<IActionResult> RegisterOwner([FromBody] RegisterOwnerDTO registerOwnerDTO)
+        [Authorize]
+        [HttpPost("register-as-owner")]
+        public async Task<IActionResult> RegisterUserAsOwner([FromBody] RegisterUserAsOwnerDTO registerUserAsOwnerDTO)
         {
-            var command = new RegisterOwnerCommand { RegisterOwnerDTO = registerOwnerDTO };
+            registerUserAsOwnerDTO = registerUserAsOwnerDTO with { ExistingUserId = User.GetUserId() };
+            var command = new RegisterUserAsOwnerCommand { RegisterUserAsOwnerDTO = registerUserAsOwnerDTO };
 
             var result = await _sender.Send(command);
 
