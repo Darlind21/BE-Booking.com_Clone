@@ -8,9 +8,9 @@ namespace BookingClone.Application.Common.DTOs
 {
     public record AuthenticatedUserDTO
     {
-        public Guid UserId { get; set; }
+        public Guid UserId { get; init; }
         //including id in case frontend wants to use it in the futures
-        public string FirstName { get; set; } = null!; 
+        public string FirstName { get; init; } = null!; 
         //including first name in case front end might want to display in navbar 
         public string Email { get; init; } = null!;
         public string Token { get; init; } = null!;

@@ -3,6 +3,7 @@ using BookingClone.Application.Interfaces.Services;
 using BookingClone.Infrastructure.Data;
 using BookingClone.Infrastructure.Repositories;
 using BookingClone.Infrastructure.Services;
+using BookingClone.Infrastructure.Services.Cloudinary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +26,12 @@ namespace BookingClone.Infrastructure.Extensions
             services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IOwnerRepository, OwnerRepository>();
+            services.AddScoped<IApartmentRepository, ApartmentRepository>();
+
+            services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
+
+            services.AddScoped<IApartmentPhotoRepository, ApartmentPhotoRepository>();
             
 
 

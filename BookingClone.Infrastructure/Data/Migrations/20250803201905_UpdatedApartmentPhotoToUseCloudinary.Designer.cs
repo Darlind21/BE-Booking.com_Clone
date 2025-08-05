@@ -4,6 +4,7 @@ using BookingClone.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingClone.Infrastructure.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    partial class BookingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250803201905_UpdatedApartmentPhotoToUseCloudinary")]
+    partial class UpdatedApartmentPhotoToUseCloudinary
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace BookingClone.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("AmenityApartment", b =>
-                {
-                    b.Property<Guid>("AmenitiesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ApartmentsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("AmenitiesId", "ApartmentsId");
-
-                    b.HasIndex("ApartmentsId");
-
-                    b.ToTable("AmenityApartment");
-                });
 
             modelBuilder.Entity("ApartmentOwner", b =>
                 {
@@ -50,21 +38,6 @@ namespace BookingClone.Infrastructure.Migrations
                     b.HasIndex("OwnersId");
 
                     b.ToTable("ApartmentOwner");
-                });
-
-            modelBuilder.Entity("BookingClone.Domain.Entities.Amenity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Amenities");
                 });
 
             modelBuilder.Entity("BookingClone.Domain.Entities.Apartment", b =>
@@ -89,15 +62,12 @@ namespace BookingClone.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("PricePerDay")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("Apartments");
                 });
@@ -302,21 +272,6 @@ namespace BookingClone.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("AmenityApartment", b =>
-                {
-                    b.HasOne("BookingClone.Domain.Entities.Amenity", null)
-                        .WithMany()
-                        .HasForeignKey("AmenitiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BookingClone.Domain.Entities.Apartment", null)
-                        .WithMany()
-                        .HasForeignKey("ApartmentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("ApartmentOwner", b =>

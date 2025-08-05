@@ -13,22 +13,19 @@ namespace BookingClone.Domain.Entities
         public Guid Id { get; private set; }
         public string Name { get; private set; } = null!;
         public string Address { get; private set; } = null!;
-        public decimal Price { get; private set; } 
+        public decimal PricePerDay { get; private set; } 
         public string Description { get; private set; } = null!;
         public decimal CleaningFee { get; private set; }
         public DateTime LastBookedOnUtc { get; private set; }
 
 
-        private readonly List<string> _amenities = new (20); //An apartment can have at maximum 20 amenities
-        public IReadOnlyCollection<string> Amenities => _amenities.AsReadOnly();
+        public List<Amenity> Amenities { get; private set; } = new (20); //An apartment can have at maximum 20 amenities
 
 
-        private readonly List<ApartmentPhoto> _apartmentPhotos = [];
-        public IReadOnlyCollection<ApartmentPhoto> ApartmentPhotos => _apartmentPhotos.AsReadOnly();
+        public List<ApartmentPhoto> ApartmentPhotos { get; private set; } = [];
 
 
-        private readonly List<Owner> _owners = [];
-        public IReadOnlyCollection<Owner> Owners => _owners.AsReadOnly();
+        public List<Owner> Owners { get; private set; } = [];
 
 
         private readonly List<Booking> _bookings= [];
@@ -39,21 +36,29 @@ namespace BookingClone.Domain.Entities
             
         }
 
-        public Apartment(string name, string address, decimal price, string description, decimal cleaningFee )
+        public Apartment(string name, string address, decimal pricePerDay, string description, decimal cleaningFee )
         {
             if (string.IsNullOrEmpty(name)) throw new ArgumentException("Apartment name cannot be null or empty");
             if (string.IsNullOrEmpty(address)) throw new ArgumentException("Apartment address cannot be null or empty");
             if (string.IsNullOrEmpty(description)) throw new ArgumentException("Apartment description cannot be null or empty");
 
-            if (price < 0) throw new ArgumentException("Apartment price cannot be negative");
+            if (pricePerDay < 0) throw new ArgumentException("Apartment price cannot be negative");
             if (cleaningFee < 0) throw new ArgumentException("Cleaning fee cannot be negative");
 
 
             Name = name;
             Address = address;
-            Price = price;
+            PricePerDay = pricePerDay;
             Description = description;
             CleaningFee = cleaningFee;
         }
+
+
+        //public void AddPhoto(ApartmentPhoto photo)
+        //{
+        //    if (photo == null) throw new ArgumentNullException(nameof(photo));
+        //    _apartmentPhotos.Add(photo);
+        //}
+
     }
 }

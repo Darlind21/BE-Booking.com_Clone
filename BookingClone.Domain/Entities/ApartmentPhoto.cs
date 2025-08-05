@@ -12,9 +12,13 @@ namespace BookingClone.Domain.Entities
     {
         [Key]
         public Guid Id { get; private set; }
-        public string ImageBase64 { get; private set; } = null!;
-        public string ImageName { get; private set; } = null!;
-        public string ImageType { get; private set; } = null!;
+
+        //Url to access the image from the cloudinary service
+        public string Url { get; private set; } = null!;
+        public bool IsMainPhoto { get; private set; } = false;
+
+        //Cloudinary's public id for the image, used to delete/manage the image from the cloudinary service
+        public string PublicId { get; private set; } = null!;
         public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
 
 
@@ -24,17 +28,15 @@ namespace BookingClone.Domain.Entities
 
         protected ApartmentPhoto() { }//parameterless ctor for ef core to use when initializing the entity when it loads data from the database
 
-        public ApartmentPhoto(string imageBase64, string imageName, string imageType, Guid apartmentId)
+        public ApartmentPhoto(string url, string publicId, Guid apartmentId)
         {
-            if (string.IsNullOrEmpty(imageBase64)) throw new ArgumentException("imageBase64 cannot be null or empty");
-            if (string.IsNullOrEmpty(imageName)) throw new ArgumentException("imageName cannot be null or empty");
-            if (string.IsNullOrEmpty(imageType)) throw new ArgumentException("imageType cannot be null or emptys");
+            if (string.IsNullOrEmpty(url)) throw new ArgumentException("url cannot be null or empty");
+            if (string.IsNullOrEmpty(publicId)) throw new ArgumentException("publicId cannot be null or empty");
 
 
             Id = Guid.NewGuid();
-            ImageBase64 = imageBase64;
-            ImageName = imageName;
-            ImageType = imageName;
+            Url = url;
+            PublicId = publicId;
             ApartmentId = apartmentId;
         }
     }

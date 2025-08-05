@@ -44,7 +44,7 @@ namespace BookingClone.API.Middleware
                     //we are saying "If ex is a ValidationException cast it to validationException",
                     //so we can use it inside the block 
                 {
-                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     var errors = validationException.Errors
                         .Where(e => e != null)
                         .Select(e => e.ErrorMessage)
