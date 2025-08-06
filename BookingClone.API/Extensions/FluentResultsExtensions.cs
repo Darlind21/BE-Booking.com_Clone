@@ -22,5 +22,17 @@ namespace BookingClone.API.Extensions
                 //                      -is often not serialized cleanly/clearly in JSON
             }
         }
+
+        public static IActionResult ToIActionResult(this Result result)
+        {
+            if (result.IsSuccess) return new OkResult();
+            else
+            {
+                return new BadRequestObjectResult(new
+                {
+                    Errors = result.Errors.Select(x => x.Message)
+                });                
+            }
+        }
     }
 }

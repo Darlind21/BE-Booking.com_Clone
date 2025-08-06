@@ -9,5 +9,8 @@ namespace BookingClone.Application.Interfaces.Repositories
 {
     public interface IApartmentPhotoRepository : IBaseRepository<ApartmentPhoto>
     {
+        Task<List<ApartmentPhoto>> GetPhotosByApartmentId(Guid apartmentId);
+        Task<int> GetPhotosCountForApartment(Guid apartmentId);
+
     }
 }

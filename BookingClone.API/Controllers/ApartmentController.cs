@@ -1,6 +1,7 @@
 ﻿using BookingClone.API.Extensions;
 using BookingClone.Application.Features.Apartment.Commands.ListNewApartment;
 using BookingClone.Application.Features.Apartment.Commands.Photos.AddApartmentPhoto;
+using BookingClone.Application.Features.Apartment.Commands.Photos.DeleteApartmentPhoto;
 using BookingClone.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -36,5 +37,17 @@ namespace BookingClone.API.Controllers
 
             return result.ToIActionResult();
         }
+
+
+        [Authorize(Roles = nameof(AppRole.Owner))]
+        [HttpDelete("delete-photo")]
+        public async Task<IActionResult> DeleteApartmentPhoto([FromBody] DeleteApartmentPhotoDTO deleteApartmentPhotoDTO)
+        {
+            var command = new DeleteApartmentPhotoCommand { DeleteApartmentPhotoDTO = deleteApartmentPhotoDTO };
+
+            var result = await _sender.Send(command);
+
+            return result.ToIActionResult();
+        } 
     }
 }
