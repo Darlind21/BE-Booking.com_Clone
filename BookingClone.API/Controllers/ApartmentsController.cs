@@ -2,6 +2,7 @@
 using BookingClone.Application.Features.Apartment.Commands.ListNewApartment;
 using BookingClone.Application.Features.Apartment.Commands.Photos.AddApartmentPhoto;
 using BookingClone.Application.Features.Apartment.Commands.Photos.DeleteApartmentPhoto;
+using BookingClone.Application.Features.Apartment.Queries.GetApartmentDetails;
 using BookingClone.Application.Features.Apartment.Queries.Photos.GetApartmentPhotos;
 using BookingClone.Domain.Enums;
 using MediatR;
@@ -53,10 +54,22 @@ namespace BookingClone.API.Controllers
 
 
         [Authorize]
-        [HttpGet("get-apartment-photos")]
-        public async Task<IActionResult> GetApartmentPhotos([FromQuery] Guid apartmentId)
+        [HttpGet("get-apartment-photos/{apartmentId}")]
+        public async Task<IActionResult> GetApartmentPhotos([FromRoute] Guid apartmentId)
         {
             var query = new GetApartmentPhotosQuery { ApartmentId = apartmentId };
+
+            var result = await _sender.Send(query);
+
+            return result.ToIActionResult();
+        }
+
+
+        [Authorize] //get apt details as a USER endpoint
+        [HttpGet("get-apartment-details/{apartmentId}")]
+        public async Task<IActionResult> GetApartmentDetailsForUser([FromRoute] Guid apartmentId)
+        {
+            var query = new GetApartmentDetailsForUserQuery { ApartmentId = apartmentId };
 
             var result = await _sender.Send(query);
 

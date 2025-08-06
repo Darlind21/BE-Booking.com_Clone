@@ -9,5 +9,6 @@ namespace BookingClone.Application.Interfaces.Repositories
 {
     public interface IApartmentRepository : IBaseRepository<Apartment>
     {
+        Task<List<Amenity>> GetAmenitiesForApartment(Guid apartmentId);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using BookingClone.Application.Interfaces.Repositories;
 using BookingClone.Domain.Entities;
 using BookingClone.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,16 @@ using System.Threading.Tasks;
 
 namespace BookingClone.Infrastructure.Repositories
 {
-    public class ApartmentRepository(BookingDbContext context) :BaseRepository<Apartment>(context), IApartmentRepository
+    public class ApartmentRepository(BookingDbContext context) : BaseRepository<Apartment>(context), IApartmentRepository
     {
+        private readonly BookingDbContext context = context;
+        public async Task<List<Amenity>> GetAmenitiesForApartment(Guid apartmentId)
+        {
+            var apt = await context.Apartments
+                .Include(a => a.Amenities)
+                .FirstOrDefaultAsync(a => a.Id == apartmentId);
+
+            return apt?.Amenities?.ToList() ?? new List<Amenity>();
+        }
     }
 }
