@@ -2,6 +2,7 @@
 using BookingClone.Application.Features.Apartment.Commands.ListNewApartment;
 using BookingClone.Application.Features.Apartment.Commands.Photos.AddApartmentPhoto;
 using BookingClone.Application.Features.Apartment.Commands.Photos.DeleteApartmentPhoto;
+using BookingClone.Application.Features.Apartment.Queries.Photos.GetApartmentPhotos;
 using BookingClone.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookingClone.API.Controllers
 {
-    public class ApartmentController(ISender _sender) : BaseAPIController
+    public class ApartmentsController(ISender _sender) : BaseAPIController
     {
         [Authorize(Roles = nameof(AppRole.Owner))]
         [HttpPost("list-new-apartment")]
@@ -48,6 +49,18 @@ namespace BookingClone.API.Controllers
             var result = await _sender.Send(command);
 
             return result.ToIActionResult();
-        } 
+        }
+
+
+        [Authorize]
+        [HttpGet("get-apartment-photos")]
+        public async Task<IActionResult> GetApartmentPhotos([FromQuery] Guid apartmentId)
+        {
+            var query = new GetApartmentPhotosQuery { ApartmentId = apartmentId };
+
+            var result = await _sender.Send(query);
+
+            return result.ToIActionResult();
+        }
     }
 }
