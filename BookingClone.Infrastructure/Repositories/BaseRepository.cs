@@ -20,7 +20,7 @@ namespace BookingClone.Infrastructure.Repositories
             if (entity != null)
             {
                 context.Set<T>().Remove(entity);
-                return await context.SaveChangesAsync() < 0;
+                return await context.SaveChangesAsync() > 0;
             }
 
             return false;
