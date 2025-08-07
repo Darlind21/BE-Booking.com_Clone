@@ -11,7 +11,7 @@ namespace BookingClone.Application.Interfaces.Repositories
     public interface IApartmentRepository : IBaseRepository<Apartment>
     {
         Task<List<Amenity>> GetAmenitiesForApartment(Guid apartmentId);
-        Task<decimal?> GetApartmentAverageRating(Guid apartmentId);
-        Task<PagedList<Apartment>> SearchAsync(SearchParams searchParams);
+        Task<decimal?> GetApartmentAverageRatingAsync(Guid apartmentId);
+        IQueryable<Apartment> Search(SearchParams searchParams);
     }
 }

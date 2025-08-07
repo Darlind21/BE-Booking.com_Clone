@@ -1,6 +1,8 @@
-﻿using BookingClone.Application.Interfaces.Repositories;
+﻿using BookingClone.Application.Common.Interfaces;
+using BookingClone.Application.Interfaces.Repositories;
 using BookingClone.Application.Interfaces.Services;
 using BookingClone.Infrastructure.Data;
+using BookingClone.Infrastructure.Helpers;
 using BookingClone.Infrastructure.Repositories;
 using BookingClone.Infrastructure.Services;
 using BookingClone.Infrastructure.Services.Cloudinary;
@@ -32,7 +34,10 @@ namespace BookingClone.Infrastructure.Extensions
             services.AddScoped<ICloudinaryService, CloudinaryService>();
 
             services.AddScoped<IApartmentPhotoRepository, ApartmentPhotoRepository>();
-            
+
+            services.AddScoped<IPaginationHelper, PaginationHelper>();
+
+
 
 
             return services;

@@ -15,9 +15,11 @@ namespace BookingClone.Application.Common.DTOs
         public string Description { get; init; } = null!;
         public decimal CleaningFee { get; init; }
 
+        public decimal? AverageRating { get; init; }
+
         public List<string> Amenities { get; init; } = [];
 
-        public PhotoResponseDTO MainPhoto { get; init; } = default!;
+        public PhotoResponseDTO? MainPhoto { get; init; } = default!;
         //when loading a pagedlist of apartments or after just listing a new apt we only get the main photo
     }
 }

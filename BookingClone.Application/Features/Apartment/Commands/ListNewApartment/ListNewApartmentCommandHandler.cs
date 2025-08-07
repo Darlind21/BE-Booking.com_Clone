@@ -63,7 +63,7 @@ namespace BookingClone.Application.Features.Apartment.Commands.ListNewApartment
                     ApartmentPhotoId =  mainPhoto.Id,
                     Url = mainPhoto.Url,
                     PublicId = mainPhoto.PublicId
-                }
+                },
             };
         }
     }

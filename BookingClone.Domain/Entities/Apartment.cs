@@ -17,7 +17,7 @@ namespace BookingClone.Domain.Entities
         public string Description { get; private set; } = null!;
         public decimal CleaningFee { get; private set; }
         public DateTime LastBookedOnUtc { get; private set; }
-
+        //FEATURE: Add MaxGuests;
 
         public List<Amenity> Amenities { get; private set; } = new (20); //An apartment can have at maximum 20 amenities
 
@@ -48,13 +48,5 @@ namespace BookingClone.Domain.Entities
             Description = description;
             CleaningFee = cleaningFee;
         }
-
-
-        //public void AddPhoto(ApartmentPhoto photo)
-        //{
-        //    if (photo == null) throw new ArgumentNullException(nameof(photo));
-        //    _apartmentPhotos.Add(photo);
-        //}
-
     }
 }
