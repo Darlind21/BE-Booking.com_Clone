@@ -1,4 +1,5 @@
-﻿using FluentResults;
+﻿using BookingClone.Application.Common.DTOs;
+using FluentResults;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BookingClone.Application.Features.Apartment.Commands.ListNewApartment
 {
-    public record ListNewApartmentCommand : IRequest<Result<ListNewApartmentResponseDTO>>
+    public record ListNewApartmentCommand : IRequest<Result<ApartmentResponseDTO>>
     {
         public ListNewApartmentDTO ListNewApartmentDTO { get; init; } = default!;
     }

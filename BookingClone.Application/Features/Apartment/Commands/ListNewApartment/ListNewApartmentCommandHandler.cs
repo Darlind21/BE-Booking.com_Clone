@@ -1,4 +1,5 @@
-﻿using BookingClone.Application.Interfaces.Repositories;
+﻿using BookingClone.Application.Common.DTOs;
+using BookingClone.Application.Interfaces.Repositories;
 using BookingClone.Application.Interfaces.Services;
 using BookingClone.Domain.Entities;
 using FluentResults;
@@ -14,9 +15,9 @@ namespace BookingClone.Application.Features.Apartment.Commands.ListNewApartment
 {
     public class ListNewApartmentCommandHandler
         (IApartmentRepository apartmentRepository, ICloudinaryService cloudinaryService, IOwnerRepository ownerRepository)
-        : IRequestHandler<ListNewApartmentCommand, Result<ListNewApartmentResponseDTO>>
+        : IRequestHandler<ListNewApartmentCommand, Result<ApartmentResponseDTO>>
     {
-        public async Task<Result<ListNewApartmentResponseDTO>> Handle(ListNewApartmentCommand request, CancellationToken cancellationToken)
+        public async Task<Result<ApartmentResponseDTO>> Handle(ListNewApartmentCommand request, CancellationToken cancellationToken)
         {
             var dto = request.ListNewApartmentDTO;
 
@@ -40,12 +41,15 @@ namespace BookingClone.Application.Features.Apartment.Commands.ListNewApartment
                 newApartment.ApartmentPhotos.Add(photo);
             }
 
+            var mainPhoto = newApartment.ApartmentPhotos.First();
+            mainPhoto.SetMainPhoto();//setting the first photo as default main photo
+
             foreach (var amenity in dto.Amenities) newApartment.Amenities.Add( new Amenity (amenity)); //it is allowed if the owner does not want to add any amenities
 
             var added = await apartmentRepository.AddAsync(newApartment);
             if (!added) throw new Exception("Unable to add new apartment listing");
 
-            return new ListNewApartmentResponseDTO
+            return new ApartmentResponseDTO
             {
                 ApartmentId = newApartment.Id,
                 Name = newApartment.Name,
@@ -54,6 +58,12 @@ namespace BookingClone.Application.Features.Apartment.Commands.ListNewApartment
                 Description = newApartment.Description,
                 CleaningFee = newApartment.CleaningFee,
                 Amenities = dto.Amenities,
+                MainPhoto = new Common.DTOs.PhotoResponseDTO
+                {
+                    ApartmentPhotoId =  mainPhoto.Id,
+                    Url = mainPhoto.Url,
+                    PublicId = mainPhoto.PublicId
+                }
             };
         }
     }

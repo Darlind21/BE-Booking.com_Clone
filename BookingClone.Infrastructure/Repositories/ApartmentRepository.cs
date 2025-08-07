@@ -1,4 +1,5 @@
-﻿using BookingClone.Application.Interfaces.Repositories;
+﻿using BookingClone.Application.Common.Helpers;
+using BookingClone.Application.Interfaces.Repositories;
 using BookingClone.Domain.Entities;
 using BookingClone.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,21 @@ namespace BookingClone.Infrastructure.Repositories
                 .FirstOrDefaultAsync(a => a.Id == apartmentId);
 
             return apt?.Amenities?.ToList() ?? new List<Amenity>();
+        }
+
+        public async Task<decimal?> GetApartmentAverageRating(Guid apartmentId)
+        {
+            return await context.Reviews
+                .AsNoTracking()
+                .Where(r => r.Booking.ApartmentId == apartmentId)
+                .Select(r => (decimal?)r.RatingOutOfTen) //if we use non-nullable decimal ef core will throw since there are no values to agerage
+                .AverageAsync(); //returns null if no reviews since we are using decimal?
+
+        }
+
+        public Task<PagedList<Apartment>> SearchAsync(SearchParams searchParams)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -16,8 +16,9 @@ namespace BookingClone.Application.Features.Apartment.Queries.GetApartmentDetail
         public decimal CleaningFee { get; init; }
 
         public List<PhotoResponseDTO> ApartmentPhotos { get; init; } = [];
+        //when getting a single apt we load all its photos as well 
         public List<string> Amenities { get; init; } = [];
 
-        //IMPROVE: Add list of reviews from bookings list for the apartment
+        public decimal? AverageRating { get; init; }
     }
 }

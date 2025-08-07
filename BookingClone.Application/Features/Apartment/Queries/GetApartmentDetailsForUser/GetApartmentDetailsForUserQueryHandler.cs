@@ -53,7 +53,8 @@ namespace BookingClone.Application.Features.Apartment.Queries.GetApartmentDetail
                 Description = apartment.Description,
                 CleaningFee = apartment.CleaningFee,
                 ApartmentPhotos = photoList,
-                Amenities = amenitiesList
+                Amenities = amenitiesList,
+                AverageRating = await apartmentRepository.GetApartmentAverageRating(apartment.Id)
             };
         }
     }

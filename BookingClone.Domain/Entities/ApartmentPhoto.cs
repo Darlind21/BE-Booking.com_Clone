@@ -39,5 +39,10 @@ namespace BookingClone.Domain.Entities
             PublicId = publicId;
             ApartmentId = apartmentId;
         }
+
+        public void SetMainPhoto()
+        {
+            IsMainPhoto = true;
+        }
     }
 }
