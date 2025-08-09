@@ -16,8 +16,8 @@ namespace BookingClone.Domain.Entities
         public decimal PricePerDay { get; private set; } 
         public string Description { get; private set; } = null!;
         public decimal CleaningFee { get; private set; }
-        public DateTime LastBookedOnUtc { get; private set; }
-        //FEATURE: Add MaxGuests;
+        public DateTime? LastBookedOnUtc { get; private set; }
+        //FEATURE: Add MaxGuests, Run migration to make lastbookedon nullable;
 
         public List<Amenity> Amenities { get; private set; } = new (20); //An apartment can have at maximum 20 amenities
 

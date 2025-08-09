@@ -42,7 +42,7 @@ namespace BookingClone.Infrastructure.Services.Cloudinary
             if (file is null || file.Length == 0)
                 return Result.Fail("File is empty or null.");
 
-            await using var stream = file.OpenReadStream();
+            await using var stream = file.OpenReadStream(); //opens the file to get its data as a readable stream(like a flow of bytes)
 
             var uploadParams = new ImageUploadParams
             {

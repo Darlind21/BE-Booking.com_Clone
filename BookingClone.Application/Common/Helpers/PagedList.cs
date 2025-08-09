@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BookingClone.Application.Common.Helpers
 {
-    public class PagedList<T>(List<T> items, int count, int pageNumber, int pageSize) : List<T>
+    public class PagedList<T>(List<T> items, int count, int pageNumber, int pageSize) //: List<T>
     {
         public List<T> Items { get; set; } = items;
         public int TotalCount { get; set; } = count;

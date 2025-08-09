@@ -78,7 +78,7 @@ namespace BookingClone.API.Controllers
             return result.ToIActionResult();
         }
 
-
+        [Authorize]
         [HttpGet("search")]
         public async Task<IActionResult> SearchApartments([FromQuery] SearchParams searchParams)
         {
