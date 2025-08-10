@@ -49,13 +49,12 @@ namespace BookingClone.Domain.Entities
         }
 
         public Booking(DateOnly startDate, DateOnly endDate, decimal priceForPeriod,
-                        decimal cleaningFee, decimal totalPrice, Guid apartmentId,
-                        Guid userId, Guid? reviewId = null, decimal? amenitiesUpCharge = null)
+                        decimal cleaningFee, Guid apartmentId,
+                        Guid userId, decimal? amenitiesUpCharge = null)
         {
             if (startDate > endDate) throw new ArgumentException("StartDate cannot be later than EndDate");
             if (priceForPeriod < 0) throw new ArgumentException("Price cannot be negative");
             if (cleaningFee < 0) throw new ArgumentException("Cleaning fee cannot be negative");
-            if (totalPrice < 0) throw new ArgumentException("Total Price cannot be negative");
             if (amenitiesUpCharge.HasValue && amenitiesUpCharge < 0) throw new ArgumentException("AmenitieUpcharge cannot be negative");
 
             Id = Guid.NewGuid();
@@ -70,8 +69,6 @@ namespace BookingClone.Domain.Entities
             ApartmentId = apartmentId;
 
             UserId = userId;
-
-            ReviewId = reviewId;
         }
     }
 }

@@ -36,6 +36,17 @@ namespace BookingClone.Infrastructure.Repositories
 
         }
 
+        public async Task<bool> IsApartmentAvailable(Guid apartmentId, DateOnly checkinDate, DateOnly checkoutDate)
+        {
+            var hasOverlappingBookings = await context.Bookings.AnyAsync(b =>
+                b.ApartmentId == apartmentId &&
+                b.Status == BookingStatus.Confirmed &&
+                !(checkoutDate <= b.StartDate || checkinDate >= b.EndDate)
+            );
+
+            return !hasOverlappingBookings;
+        }
+
         public IQueryable<Apartment> Search(SearchParams searchParams)
         {
             var query = context.Apartments
