@@ -14,6 +14,13 @@ namespace BookingClone.Infrastructure.Repositories
     {
         private readonly BookingDbContext context = context;
 
+        public async Task<List<Booking>> GetBookingsByApartmentId(Guid apartmentId)
+        {
+            return await context.Bookings
+                .Where(b => b.ApartmentId == apartmentId)
+                .Include(b => b.Apartment)
+                .ToListAsync();
+        }
 
         public async Task<List<Booking>> GetBookingsByUserId(Guid userId)
         {

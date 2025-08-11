@@ -10,5 +10,6 @@ namespace BookingClone.Application.Interfaces.Repositories
     public interface IBookingRepository : IBaseRepository<Booking>
     {
         Task<List<Booking>> GetBookingsByUserId(Guid userId);
+        Task<List<Booking>> GetBookingsByApartmentId(Guid apartmentId);
     }
 }

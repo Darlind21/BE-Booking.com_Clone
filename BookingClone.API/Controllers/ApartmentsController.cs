@@ -6,6 +6,8 @@ using BookingClone.Application.Features.Apartment.Commands.Photos.DeleteApartmen
 using BookingClone.Application.Features.Apartment.Queries.GetApartmentDetails;
 using BookingClone.Application.Features.Apartment.Queries.Photos.GetApartmentPhotos;
 using BookingClone.Application.Features.Apartment.Queries.SearchApartments;
+using BookingClone.Application.Features.Booking.Queries.GetBookingsForApartment;
+using BookingClone.Application.Features.Booking.Queries.GetBookingsForUser;
 using BookingClone.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -78,6 +80,7 @@ namespace BookingClone.API.Controllers
             return result.ToIActionResult();
         }
 
+
         [Authorize]
         [HttpGet("search")]
         public async Task<IActionResult> SearchApartments([FromQuery] SearchParams searchParams)
@@ -87,6 +90,18 @@ namespace BookingClone.API.Controllers
             var result = await _sender.Send(query);
 
             Response.AddPaginationHeader(result.ValueOrDefault);
+
+            return result.ToIActionResult();
+        }
+
+
+        [Authorize]
+        [HttpGet("get-bookings-for-apartment/{apartmentId}")]
+        public async Task<IActionResult> GetBookingsForApartment([FromRoute] Guid apartmentId)
+        {
+            var query = new GetBookingsForApartmentQuery { ApartmentId = apartmentId };
+
+            var result = await _sender.Send(query);
 
             return result.ToIActionResult();
         }
