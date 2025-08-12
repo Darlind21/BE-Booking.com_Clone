@@ -1,5 +1,7 @@
-﻿using BookingClone.Application.Features.Booking.Commands.CompleteBooking;
+﻿using BookingClone.Application.Common.DTOs;
+using BookingClone.Application.Features.Booking.Commands.CompleteBooking;
 using BookingClone.Application.Interfaces.Repositories;
+using BookingClone.Domain.Enums;
 using FluentResults;
 using MediatR;
 using System;
@@ -20,6 +22,12 @@ namespace BookingClone.Application.Features.Booking.Commands.CompleteBookings
             {
                 var booking = await bookingRepository.GetByIdAsync(request.BookingId.Value);
                 if (booking == null) throw new Exception("Unable to complete booking with this id as it does not exist");
+
+                if (booking.Status != BookingStatus.Confirmed)
+                    return Result.Fail("Unable to complete booking as its status is not Confirmed");
+
+                if (booking.EndDate > DateOnly.FromDateTime(DateTime.UtcNow))
+                    return Result.Fail("Cannot complete booking before its end date");
 
                 booking.CompleteBooking();
 

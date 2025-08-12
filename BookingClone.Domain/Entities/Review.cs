@@ -31,7 +31,7 @@ namespace BookingClone.Domain.Entities
             // Parameterless constructor for EF Core
         }
 
-        public Review(byte ratingOutOfTen, Guid bookingId, string? comment = null)
+        public Review(byte ratingOutOfTen, Guid bookingId, Guid userId, string? comment = null)
         {
             if (ratingOutOfTen < 1 || ratingOutOfTen > 10) throw new ArgumentException("Rating must be between 1 and 10");
  
@@ -39,6 +39,7 @@ namespace BookingClone.Domain.Entities
             RatingOutOfTen = ratingOutOfTen;
 
             BookingId = bookingId;
+            UserId = userId;
         }
     }
 }

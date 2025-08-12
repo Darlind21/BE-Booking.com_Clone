@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <Folder Include="Features\Owner\Queries\" />
+    <Folder Include="Features\Review\Queries\GetReviewsForApartment\" />
+    <Folder Include="Features\Review\Queries\GetUserReviewHistory\" />
   </ItemGroup>
 
   <ItemGroup>
