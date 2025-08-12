@@ -12,6 +12,7 @@ namespace BookingClone.Application.Features.Booking.Queries.GetBookingsForApartm
 {
     public record GetBookingsForApartmentQuery : IRequest<Result<PagedList<BookingResponseDTO>>>
     {
+        public Guid UserId { get; init; }
         public BookingSearchParams BookingSearchParams { get; init; } = default!;
     }
 }

@@ -17,6 +17,14 @@ namespace BookingClone.Infrastructure.Repositories
     public class ApartmentRepository(BookingDbContext context) : BaseRepository<Apartment>(context), IApartmentRepository
     {
         private readonly BookingDbContext context = context;
+
+        public async Task<bool> ApartmentBelongsToOwner(Guid apartmentId, Guid userId)
+        {
+            return await context.Apartments
+                .AsNoTracking()
+                .AnyAsync(a => a.Id == apartmentId && a.Owners.Any(o => o.UserId == userId));
+        }
+
         public async Task<List<Amenity>> GetAmenitiesForApartment(Guid apartmentId)
         {
             var apt = await context.Apartments

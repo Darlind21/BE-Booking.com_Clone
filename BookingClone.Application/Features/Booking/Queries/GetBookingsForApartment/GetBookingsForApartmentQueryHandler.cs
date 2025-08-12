@@ -13,11 +13,14 @@ using System.Threading.Tasks;
 namespace BookingClone.Application.Features.Booking.Queries.GetBookingsForApartment
 {
     public class GetBookingsForApartmentQueryHandler
-        (IBookingRepository bookingRepository, IPaginationHelper paginationHelper)
+        (IBookingRepository bookingRepository, IPaginationHelper paginationHelper, IApartmentRepository apartmentRepository)
         : IRequestHandler<GetBookingsForApartmentQuery, Result<PagedList<BookingResponseDTO>>>
     {
         public async Task<Result<PagedList<BookingResponseDTO>>> Handle(GetBookingsForApartmentQuery request, CancellationToken cancellationToken)
         {
+            if (!await apartmentRepository.ApartmentBelongsToOwner(request.BookingSearchParams.ApartmentId!.Value, request.UserId)) 
+                throw new Exception("Apartment with this id does not belong to owner with this user id");
+
             if (request.BookingSearchParams.ApartmentId == null || request.BookingSearchParams.ApartmentId == default)
                 throw new Exception("Apartment id not provided to get bookings");
 
@@ -33,7 +36,7 @@ namespace BookingClone.Application.Features.Booking.Queries.GetBookingsForApartm
                 CleaningFee = booking.CleaningFee,
                 AmenitiesUpCharge = booking.AmenitiesUpCharge,
                 TotalPrice = booking.TotalPrice,
-                Status = booking.Status,
+                Status = booking.Status.ToString(),
             });
 
             return await paginationHelper.PaginateAsync(projected, request.BookingSearchParams.PageNumber, request.BookingSearchParams.PageSize);

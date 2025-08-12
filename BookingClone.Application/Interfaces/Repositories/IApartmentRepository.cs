@@ -14,5 +14,6 @@ namespace BookingClone.Application.Interfaces.Repositories
         Task<decimal?> GetApartmentAverageRatingAsync(Guid apartmentId);
         IQueryable<Apartment> Search(ApartmentSearchParams searchParams);
         Task<bool> IsApartmentAvailable(Guid apartmentId, DateOnly checkinDate, DateOnly checkoutDate);
+        Task<bool> ApartmentBelongsToOwner(Guid apartmentId, Guid userId);
     }
 }
