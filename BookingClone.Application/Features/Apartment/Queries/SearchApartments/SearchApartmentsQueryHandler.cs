@@ -18,7 +18,7 @@ namespace BookingClone.Application.Features.Apartment.Queries.SearchApartments
     {
         public async Task<Result<PagedList<ApartmentResponseDTO>>> Handle(SearchApartmentsQuery request, CancellationToken cancellationToken)
         {
-            var query = apartmentRepository.Search(request.SearchParams);
+            var query = apartmentRepository.Search(request.ApartmentSearchParams);
 
             var projected = query.Select(apartment => new ApartmentResponseDTO
             {
@@ -46,7 +46,7 @@ namespace BookingClone.Application.Features.Apartment.Queries.SearchApartments
                                 : 0m
             });
 
-            return await paginationHelper.PaginateAsync(projected, request.SearchParams.PageNumber, request.SearchParams.PageSize);
+            return await paginationHelper.PaginateAsync(projected, request.ApartmentSearchParams.PageNumber, request.ApartmentSearchParams.PageSize);
         }
     }
 }

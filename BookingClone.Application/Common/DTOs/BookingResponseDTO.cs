@@ -17,6 +17,6 @@ namespace BookingClone.Application.Common.DTOs
         public decimal CleaningFee { get; init; }
         public decimal? AmenitiesUpCharge { get; init; }
         public decimal TotalPrice { get; init; }
-        public BookingStatus Status { get; init; } 
+        public string Status { get; init; } = default!;
     }
 }

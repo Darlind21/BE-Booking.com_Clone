@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BookingClone.Application.Common.Helpers
 {
-    public record SearchParams //used to encapsulatte filters, sorting and pagination parameters
+    public record ApartmentSearchParams //used to encapsulatte filters, sorting and pagination parameters
     {
         public string? Name { get; init; }
         public string? Address { get; init; }

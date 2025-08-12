@@ -47,7 +47,7 @@ namespace BookingClone.Infrastructure.Repositories
             return !hasOverlappingBookings;
         }
 
-        public IQueryable<Apartment> Search(SearchParams searchParams)
+        public IQueryable<Apartment> Search(ApartmentSearchParams searchParams)
         {
             var query = context.Apartments
                 //.Include(a => a.ApartmentPhotos)

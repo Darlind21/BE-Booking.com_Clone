@@ -1,4 +1,5 @@
 ﻿using BookingClone.Application.Common.DTOs;
+using BookingClone.Application.Common.Helpers;
 using FluentResults;
 using MediatR;
 using System;
@@ -9,8 +10,8 @@ using System.Threading.Tasks;
 
 namespace BookingClone.Application.Features.Booking.Queries.GetBookingsForUser
 {
-    public record GetBookingsForUserQuery : IRequest<Result<List<BookingResponseDTO>>>
+    public record GetBookingsForUserQuery : IRequest<Result<PagedList<BookingResponseDTO>>>
     {
-        public Guid UserId { get; init; }
+        public BookingSearchParams BookingSearchParams { get; init; } = default!;
     }
 }

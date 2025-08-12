@@ -83,9 +83,9 @@ namespace BookingClone.API.Controllers
 
         [Authorize]
         [HttpGet("search")]
-        public async Task<IActionResult> SearchApartments([FromQuery] SearchParams searchParams)
+        public async Task<IActionResult> SearchApartments([FromQuery] ApartmentSearchParams searchParams)
         {
-            var query = new SearchApartmentsQuery { SearchParams = searchParams };
+            var query = new SearchApartmentsQuery { ApartmentSearchParams = searchParams };
 
             var result = await _sender.Send(query);
 
@@ -95,13 +95,15 @@ namespace BookingClone.API.Controllers
         }
 
 
-        [Authorize]
-        [HttpGet("get-bookings-for-apartment/{apartmentId}")]
-        public async Task<IActionResult> GetBookingsForApartment([FromRoute] Guid apartmentId)
+        [Authorize(Roles = nameof(AppRole.Owner))]
+        [HttpGet("bookings")]
+        public async Task<IActionResult> GetBookingsForApartment([FromQuery] BookingSearchParams searchParams)
         {
-            var query = new GetBookingsForApartmentQuery { ApartmentId = apartmentId };
+            var query = new GetBookingsForApartmentQuery { BookingSearchParams = searchParams };
 
             var result = await _sender.Send(query);
+
+            Response.AddPaginationHeader(result.ValueOrDefault);
 
             return result.ToIActionResult();
         }

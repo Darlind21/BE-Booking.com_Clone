@@ -12,6 +12,6 @@ namespace BookingClone.Application.Features.Apartment.Queries.SearchApartments
 {
     public record SearchApartmentsQuery : IRequest<Result<PagedList<ApartmentResponseDTO>>>
     {
-        public SearchParams SearchParams { get; init; } = default!;
+        public ApartmentSearchParams ApartmentSearchParams { get; init; } = default!;
     }
 }

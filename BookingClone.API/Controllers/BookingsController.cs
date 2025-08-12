@@ -1,4 +1,5 @@
 ﻿using BookingClone.API.Extensions;
+using BookingClone.Application.Common.Helpers;
 using BookingClone.Application.Features.Booking.Commands.CreateBooking;
 using BookingClone.Application.Features.Booking.Queries.GetBookingDetails;
 using BookingClone.Application.Features.Booking.Queries.GetBookingsForUser;
@@ -15,6 +16,7 @@ namespace BookingClone.API.Controllers
         [HttpPost("book")]
         public async Task<IActionResult> CreateBooking([FromBody]CreateBookingDTO createBookingDTO)
         {
+            createBookingDTO = createBookingDTO with { UserId = User.GetUserId() };
             var command = new CreateBookingCommand { CreateBookingDTO = createBookingDTO };
 
             var result = await _sender.Send(command);
@@ -23,7 +25,7 @@ namespace BookingClone.API.Controllers
         }
 
         [Authorize]
-        [HttpGet("details/{id}")]
+        [HttpGet("details/{bookingId}")]
         public async Task<IActionResult> GetBookingDetails([FromRoute] Guid bookingId)
         {
             var query = new GetBookingDetailsQuery { BookingId = bookingId };
@@ -35,11 +37,14 @@ namespace BookingClone.API.Controllers
 
         [Authorize]
         [HttpGet("my-bookings")]
-        public async Task<IActionResult> GetBookingsForUser()
+        public async Task<IActionResult> GetBookingsForUser([FromQuery] BookingSearchParams searchParams)
         {
-            var query = new GetBookingsForUserQuery { UserId = User.GetUserId() };
+            searchParams = searchParams with { UserId = User.GetUserId() }; //forcibly making it so the user can only see his bookings only
+            var query = new GetBookingsForUserQuery { BookingSearchParams = searchParams };
 
             var result = await _sender.Send(query);
+
+            Response.AddPaginationHeader(result.ValueOrDefault);
 
             return result.ToIActionResult();
         }

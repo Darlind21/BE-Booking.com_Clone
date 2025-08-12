@@ -12,7 +12,7 @@ namespace BookingClone.Application.Interfaces.Repositories
     {
         Task<List<Amenity>> GetAmenitiesForApartment(Guid apartmentId);
         Task<decimal?> GetApartmentAverageRatingAsync(Guid apartmentId);
-        IQueryable<Apartment> Search(SearchParams searchParams);
+        IQueryable<Apartment> Search(ApartmentSearchParams searchParams);
         Task<bool> IsApartmentAvailable(Guid apartmentId, DateOnly checkinDate, DateOnly checkoutDate);
     }
 }

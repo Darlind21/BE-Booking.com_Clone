@@ -1,4 +1,6 @@
-﻿using BookingClone.Application.Interfaces.Repositories;
+﻿using BookingClone.Application.Common.Enums;
+using BookingClone.Application.Common.Helpers;
+using BookingClone.Application.Interfaces.Repositories;
 using BookingClone.Domain.Entities;
 using BookingClone.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BookingClone.Infrastructure.Repositories
 {
@@ -14,20 +17,79 @@ namespace BookingClone.Infrastructure.Repositories
     {
         private readonly BookingDbContext context = context;
 
-        public async Task<List<Booking>> GetBookingsByApartmentId(Guid apartmentId)
+        public IQueryable<Booking> GetBookingsByApartmentId(BookingSearchParams bookingSearchParams)
         {
-            return await context.Bookings
-                .Where(b => b.ApartmentId == apartmentId)
+            var query = context.Bookings
+                .AsNoTracking()
+                .Where(b => b.ApartmentId == bookingSearchParams.ApartmentId!.Value)
                 .Include(b => b.Apartment)
-                .ToListAsync();
+                .AsQueryable();
+
+            if (bookingSearchParams.Status.HasValue)
+            {
+                query = query.Where(b => b.Status == bookingSearchParams.Status.Value);
+            }
+
+            if (bookingSearchParams.FromDate.HasValue)
+            {
+                query = query.Where(b => b.StartDate >= bookingSearchParams.FromDate.Value);
+            }
+
+            if (bookingSearchParams.ToDate.HasValue)
+            {
+                query = query.Where(b => b.EndDate <= bookingSearchParams.ToDate.Value);
+            }
+
+            switch(bookingSearchParams.SortBy)
+            {
+                case BookingSortBy.CreatedAt:
+                    query = bookingSearchParams.SortDescending ? query.OrderByDescending(b => b.CreatedOnUtc) : query.OrderBy(b => b.CreatedOnUtc);
+                    break;
+
+                default:
+                    query = bookingSearchParams.SortDescending ? query.OrderByDescending(b => b.CreatedOnUtc) : query.OrderBy(b => b.CreatedOnUtc);
+                    break;
+            };
+
+            return query;
         }
 
-        public async Task<List<Booking>> GetBookingsByUserId(Guid userId)
+        public IQueryable<Booking> GetBookingsByUserId(BookingSearchParams bookingSearchParams)
         {
-            return await context.Bookings
-                .Where(b => b.UserId == userId)
+            var query = context.Bookings
+                .AsNoTracking()
+                .Where(b => b.UserId == bookingSearchParams.UserId!.Value) //will throw if userid is null
                 .Include(b => b.Apartment)
-                .ToListAsync();
+                .AsQueryable();
+
+            if (bookingSearchParams.Status.HasValue)
+            {
+                query = query.Where(b => b.Status == bookingSearchParams.Status.Value);
+            }
+
+            if (bookingSearchParams.FromDate.HasValue)
+            {
+                query = query.Where(b => b.StartDate >= bookingSearchParams.FromDate.Value);
+            }
+
+            if (bookingSearchParams.ToDate.HasValue)
+            {
+                query = query.Where(b => b.EndDate <= bookingSearchParams.ToDate.Value);
+            }
+
+            switch (bookingSearchParams.SortBy)
+            {
+                case BookingSortBy.CreatedAt:
+                    query = bookingSearchParams.SortDescending ? query.OrderByDescending(b => b.CreatedOnUtc) : query.OrderBy(b => b.CreatedOnUtc);
+                    break;
+
+                default:
+                    query = bookingSearchParams.SortDescending ? query.OrderByDescending(b => b.CreatedOnUtc) : query.OrderBy(b => b.CreatedOnUtc);
+                    break;
+            }
+            ;
+
+            return query;
         }
     }
 }

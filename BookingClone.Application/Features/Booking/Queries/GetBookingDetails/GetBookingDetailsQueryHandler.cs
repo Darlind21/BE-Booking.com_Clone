@@ -32,7 +32,7 @@ namespace BookingClone.Application.Features.Booking.Queries.GetBookingDetails
                 CleaningFee = booking.CleaningFee,
                 AmenitiesUpCharge = booking.AmenitiesUpCharge,
                 TotalPrice = booking.TotalPrice,
-                Status = booking.Status,
+                Status = booking.Status.ToString(),
             };
         }
     }

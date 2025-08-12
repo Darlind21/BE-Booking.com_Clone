@@ -11,7 +11,7 @@ namespace BookingClone.Application.Features.Apartment.Queries.SearchApartments
     {
         public SearchApartmentsQueryValidator()
         {
-            RuleFor(x => x.SearchParams.SortBy)
+            RuleFor(x => x.ApartmentSearchParams.SortBy)
                 .IsInEnum()
                 .WithMessage("Invalid sort option.");
         }
