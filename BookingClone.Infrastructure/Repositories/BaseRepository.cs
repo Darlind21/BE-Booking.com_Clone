@@ -46,6 +46,11 @@ namespace BookingClone.Infrastructure.Repositories
             return await context.Set<T>().FindAsync(id);
         }
 
+        public async Task<bool> SaveChangesAsync()
+        {
+            return await context.SaveChangesAsync() > 0;
+        }
+
         public virtual async Task<bool> UpdateAsync(T entity)
         {
             context.Set<T>().Update(entity);

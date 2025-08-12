@@ -2,6 +2,7 @@
 using BookingClone.Application.Common.Helpers;
 using BookingClone.Application.Interfaces.Repositories;
 using BookingClone.Domain.Entities;
+using BookingClone.Domain.Enums;
 using BookingClone.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -96,6 +97,13 @@ namespace BookingClone.Infrastructure.Repositories
             ;
 
             return query;
+        }
+
+        public IQueryable<Booking> GetExpiredBookingsQuery()
+        {
+            return context.Bookings
+                .Where(b => b.EndDate <= DateOnly.FromDateTime(DateTime.UtcNow) && b.Status == BookingStatus.Confirmed)
+                .AsQueryable();
         }
 
         public async Task<bool> IsBookingDoneByUser(Guid userId, Guid bookingId)

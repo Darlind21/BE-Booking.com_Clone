@@ -15,5 +15,6 @@ namespace BookingClone.Application.Interfaces.Repositories
         Task<bool> AddAsync(T entity);
         Task<bool> UpdateAsync(T entity);
         Task<IEnumerable<T>> GetAllAsync();
+        Task<bool> SaveChangesAsync();
     }
 }
