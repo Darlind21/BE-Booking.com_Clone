@@ -3,6 +3,7 @@ using BookingClone.Application.Common.Helpers;
 using BookingClone.Application.Features.Booking.Commands.ApproveBooking;
 using BookingClone.Application.Features.Booking.Commands.CancelBooking;
 using BookingClone.Application.Features.Booking.Commands.CreateBooking;
+using BookingClone.Application.Features.Booking.Commands.RejectBooking;
 using BookingClone.Application.Features.Booking.Queries.GetBookingDetails;
 using BookingClone.Application.Features.Booking.Queries.GetBookingsForUser;
 using BookingClone.Domain.Enums;
@@ -76,6 +77,22 @@ namespace BookingClone.API.Controllers
         public async Task<IActionResult> ConfirmBooking([FromRoute] Guid bookingId)
         {
             var command = new ConfirmBookingCommand
+            {
+                BookingId = bookingId,
+                UserId = User.GetUserId()
+            };
+
+            var result = await _sender.Send(command);
+
+            return result.ToIActionResult();
+        }
+
+
+        [Authorize(Roles = nameof(AppRole.Owner))]
+        [HttpPatch("reject/{bookingId}")]
+        public async Task<IActionResult> RejectBooking([FromRoute] Guid bookingId)
+        {
+            var command = new RejectBookingCommand
             {
                 BookingId = bookingId,
                 UserId = User.GetUserId()
