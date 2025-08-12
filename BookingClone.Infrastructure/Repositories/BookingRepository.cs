@@ -91,5 +91,11 @@ namespace BookingClone.Infrastructure.Repositories
 
             return query;
         }
+
+        public async Task<bool> IsBookingDoneByUser(Guid userId, Guid bookingId)
+        {
+            return await context.Bookings
+                .AnyAsync(b => b.Id == bookingId && b.UserId == userId);
+        }
     }
 }

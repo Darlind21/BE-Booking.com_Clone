@@ -70,5 +70,23 @@ namespace BookingClone.Domain.Entities
 
             UserId = userId;
         }
+
+        public void CancelBooking()
+        {
+            CancelledOnUtc = DateTime.UtcNow;
+        }
+        public void ConfirmBooking()
+        {
+            ConfirmedOnUtc = DateTime.UtcNow;
+        }
+        public void RejectBooking()
+        {
+            RejectedOnUtc = DateTime.UtcNow;
+        }
+        public void CompleteBooking()
+        {
+            CompletedOnUtc = DateTime.UtcNow;
+        }
+
     }
 }

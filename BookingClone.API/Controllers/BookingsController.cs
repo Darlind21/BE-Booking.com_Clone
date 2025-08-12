@@ -1,5 +1,6 @@
 ﻿using BookingClone.API.Extensions;
 using BookingClone.Application.Common.Helpers;
+using BookingClone.Application.Features.Booking.Commands.CancelBooking;
 using BookingClone.Application.Features.Booking.Commands.CreateBooking;
 using BookingClone.Application.Features.Booking.Queries.GetBookingDetails;
 using BookingClone.Application.Features.Booking.Queries.GetBookingsForUser;
@@ -45,6 +46,21 @@ namespace BookingClone.API.Controllers
             var result = await _sender.Send(query);
 
             Response.AddPaginationHeader(result.ValueOrDefault);
+
+            return result.ToIActionResult();
+        }
+
+        [Authorize]
+        [HttpPatch("cancel/{bookingId}")]
+        public async Task<IActionResult> CancelBooking([FromRoute] Guid bookingId)
+        {
+            var command = new CancelBookingCommand
+            {
+                BookingId = bookingId,
+                UserId = User.GetUserId()
+            };
+
+            var result = await _sender.Send(command);
 
             return result.ToIActionResult();
         }

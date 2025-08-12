@@ -12,5 +12,6 @@ namespace BookingClone.Application.Interfaces.Repositories
     {
         IQueryable<Booking> GetBookingsByUserId(BookingSearchParams bookingSearchParams);
         IQueryable<Booking> GetBookingsByApartmentId(BookingSearchParams bookingSearchParams);
+        Task<bool> IsBookingDoneByUser(Guid userId, Guid bookingId);
     }
 }

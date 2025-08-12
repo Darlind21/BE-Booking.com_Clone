@@ -7,10 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Booking\Commands\ApproveBooking\" />
     <Folder Include="Features\Booking\Commands\CompleteBooking\" />
     <Folder Include="Features\Booking\Commands\RejectBooking\" />
-    <Folder Include="Features\Booking\Commands\CancelBooking\" />
     <Folder Include="Features\Owner\Queries\" />
   </ItemGroup>
 
