@@ -19,6 +19,9 @@ namespace BookingClone.Domain.Enums
         Rejected = 3,
 
         [Display(Name = "Cancelled")]
-        Cancelled = 4
+        Cancelled = 4,
+
+        [Display(Name = "Completed")]
+        Completed = 5,
     }
 }

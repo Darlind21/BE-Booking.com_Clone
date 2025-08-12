@@ -1,9 +1,11 @@
 ﻿using BookingClone.API.Extensions;
 using BookingClone.Application.Common.Helpers;
+using BookingClone.Application.Features.Booking.Commands.ApproveBooking;
 using BookingClone.Application.Features.Booking.Commands.CancelBooking;
 using BookingClone.Application.Features.Booking.Commands.CreateBooking;
 using BookingClone.Application.Features.Booking.Queries.GetBookingDetails;
 using BookingClone.Application.Features.Booking.Queries.GetBookingsForUser;
+using BookingClone.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -25,6 +27,7 @@ namespace BookingClone.API.Controllers
             return result.ToIActionResult();
         }
 
+
         [Authorize]
         [HttpGet("details/{bookingId}")]
         public async Task<IActionResult> GetBookingDetails([FromRoute] Guid bookingId)
@@ -35,6 +38,7 @@ namespace BookingClone.API.Controllers
 
             return result.ToIActionResult();
         }
+
 
         [Authorize]
         [HttpGet("my-bookings")]
@@ -50,11 +54,28 @@ namespace BookingClone.API.Controllers
             return result.ToIActionResult();
         }
 
+
         [Authorize]
         [HttpPatch("cancel/{bookingId}")]
         public async Task<IActionResult> CancelBooking([FromRoute] Guid bookingId)
         {
             var command = new CancelBookingCommand
+            {
+                BookingId = bookingId,
+                UserId = User.GetUserId()
+            };
+
+            var result = await _sender.Send(command);
+
+            return result.ToIActionResult();
+        }
+
+
+        [Authorize(Roles = nameof(AppRole.Owner))]
+        [HttpPatch("confirm/{bookingId}")]
+        public async Task<IActionResult> ConfirmBooking([FromRoute] Guid bookingId)
+        {
+            var command = new ConfirmBookingCommand
             {
                 BookingId = bookingId,
                 UserId = User.GetUserId()

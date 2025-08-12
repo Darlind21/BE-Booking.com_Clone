@@ -73,18 +73,22 @@ namespace BookingClone.Domain.Entities
 
         public void CancelBooking()
         {
+            Status = BookingStatus.Cancelled;
             CancelledOnUtc = DateTime.UtcNow;
         }
         public void ConfirmBooking()
         {
+            Status = BookingStatus.Confirmed;
             ConfirmedOnUtc = DateTime.UtcNow;
         }
         public void RejectBooking()
         {
+            Status = BookingStatus.Rejected;
             RejectedOnUtc = DateTime.UtcNow;
         }
         public void CompleteBooking()
         {
+            Status = BookingStatus.Completed;
             CompletedOnUtc = DateTime.UtcNow;
         }
 

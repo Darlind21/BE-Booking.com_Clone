@@ -17,6 +17,12 @@ namespace BookingClone.Infrastructure.Repositories
     {
         private readonly BookingDbContext context = context;
 
+        public async Task<bool> CanOwnerConfirmOrRejectBooking(Guid userId, Guid bookingId)
+        {
+            return await context.Bookings
+                .AnyAsync(b => b.Id == bookingId && b.Apartment.Owners.Any(o => o.UserId == userId));
+        }
+
         public IQueryable<Booking> GetBookingsByApartmentId(BookingSearchParams bookingSearchParams)
         {
             var query = context.Bookings

@@ -107,7 +107,9 @@ namespace BookingClone.Infrastructure.Repositories
                     break;
 
                 case ApartmentSortBy.Popularity:
-                    query = searchParams.SortDescending ? query.OrderByDescending(a => a.Bookings.Count) : query.OrderBy(a => a.Bookings.Count);
+                    query = searchParams.SortDescending ?
+                        query.OrderByDescending(a => a.Bookings.Where(b => b.Status == BookingStatus.Completed).Count()) 
+                        : query.OrderBy(a => a.Bookings.Where(b => b.Status == BookingStatus.Completed).Count());
                     break;
 
                 default:
