@@ -11,5 +11,7 @@ namespace BookingClone.Application.Interfaces.Repositories
     public interface IReviewRepository : IBaseRepository<Review>
     {
         IQueryable<Review> GetReviewsForApartment(ReviewSearchParams reviewsSearchParams);
+        IQueryable<Review> GetReviewsForUser(ReviewSearchParams reviewsSearchParams, Guid userId);
+
     }
 }

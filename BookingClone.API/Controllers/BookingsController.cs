@@ -3,6 +3,7 @@ using BookingClone.Application.Common.DTOs;
 using BookingClone.Application.Common.Helpers;
 using BookingClone.Application.Features.Booking.Commands.ApproveBooking;
 using BookingClone.Application.Features.Booking.Commands.CancelBooking;
+using BookingClone.Application.Features.Booking.Commands.CompleteBooking;
 using BookingClone.Application.Features.Booking.Commands.CreateBooking;
 using BookingClone.Application.Features.Booking.Commands.RejectBooking;
 using BookingClone.Application.Features.Booking.Queries.GetBookingDetails;
@@ -98,6 +99,21 @@ namespace BookingClone.API.Controllers
             {
                 BookingId = bookingId,
                 UserId = User.GetUserId()
+            };
+
+            var result = await _sender.Send(command);
+
+            return result.ToIActionResult();
+        }
+
+
+        [Authorize(Roles = nameof(AppRole.Owner))]
+        [HttpPatch("complete/{bookingId}")]
+        public async Task<IActionResult> CompleteBooking([FromRoute] Guid bookingId)
+        {
+            var command = new CompleteBookingsCommand
+            {
+                BookingId = bookingId
             };
 
             var result = await _sender.Send(command);

@@ -18,8 +18,8 @@ namespace BookingClone.Application.Common.Helpers
 
         public DateOnly? FromDate { get; init; }
         public DateOnly? ToDate { get; init; }
-        public byte MinRating { get; init; }
-        public byte MaxRating { get; init; }
+        public byte? MinRating { get; init; }
+        public byte? MaxRating { get; init; }
         public ReviewSortBy SortBy { get; init; } = ReviewSortBy.CreatedOn;
         public bool SortDescending { get; init; } = true;
     }

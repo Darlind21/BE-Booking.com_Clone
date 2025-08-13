@@ -3,6 +3,8 @@ using BookingClone.Application.Common.DTOs;
 using BookingClone.Application.Common.Helpers;
 using BookingClone.Application.Features.Booking.Queries.GetBookingsForApartment;
 using BookingClone.Application.Features.Review.Commands.SubmitReview;
+using BookingClone.Application.Features.Review.Queries.GetReviewsForApartment;
+using BookingClone.Application.Features.Review.Queries.GetUserReviewHistory;
 using BookingClone.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -24,6 +26,24 @@ namespace BookingClone.API.Controllers
             };
 
             var result = await _sender.Send(command);
+
+            return result.ToIActionResult();
+        }
+
+
+        [Authorize]
+        [HttpGet("my-reviews")]
+        public async Task<IActionResult> GetUserReviewHistory([FromQuery] ReviewSearchParams searchParams)
+        {
+            var query = new GetUserReviewHistoryQuery
+            {
+                UserId = User.GetUserId(),
+                ReviewSearchParams = searchParams
+            };
+
+            var result = await _sender.Send(query);
+
+            Response.AddPaginationHeader(result.ValueOrDefault);
 
             return result.ToIActionResult();
         }
