@@ -40,6 +40,8 @@ namespace BookingClone.Application.Features.Booking.Commands.CreateBooking
 
             return new BookingResponseDTO
             {
+                BookingId = booking.Id,
+                ApartmentId = apartment.Id,
                 ApartmentName = apartment.Name,
                 ApartmentAddress = apartment.Address,
                 CheckinDate = booking.StartDate,

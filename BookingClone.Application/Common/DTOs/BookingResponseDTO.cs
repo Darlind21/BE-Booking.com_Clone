@@ -9,6 +9,8 @@ namespace BookingClone.Application.Common.DTOs
 {
     public record BookingResponseDTO
     {
+        public Guid BookingId { get; init; }
+        public Guid ApartmentId { get; init; }
         public string ApartmentName { get; init; } = default!;
         public string ApartmentAddress { get; init; } = default!;
         public DateOnly CheckinDate { get; init; }

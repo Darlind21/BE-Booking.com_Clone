@@ -1,4 +1,5 @@
-﻿using BookingClone.Domain.Entities;
+﻿using BookingClone.Application.Common.Helpers;
+using BookingClone.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,6 @@ namespace BookingClone.Application.Interfaces.Repositories
 {
     public interface IReviewRepository : IBaseRepository<Review>
     {
+        IQueryable<Review> GetReviewsForApartment(ReviewSearchParams reviewsSearchParams);
     }
 }

@@ -29,11 +29,11 @@ namespace BookingClone.Infrastructure.Extensions
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IOwnerRepository, OwnerRepository>();
             services.AddScoped<IApartmentRepository, ApartmentRepository>();
+            services.AddScoped<IApartmentPhotoRepository, ApartmentPhotoRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
 
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddScoped<ICloudinaryService, CloudinaryService>();
-
-            services.AddScoped<IApartmentPhotoRepository, ApartmentPhotoRepository>();
 
             services.AddScoped<IPaginationHelper, PaginationHelper>();
 

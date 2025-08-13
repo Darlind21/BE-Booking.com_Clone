@@ -1,6 +1,9 @@
 ﻿using BookingClone.API.Extensions;
 using BookingClone.Application.Common.DTOs;
+using BookingClone.Application.Common.Helpers;
+using BookingClone.Application.Features.Booking.Queries.GetBookingsForApartment;
 using BookingClone.Application.Features.Review.Commands.SubmitReview;
+using BookingClone.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

@@ -8,6 +8,7 @@ using BookingClone.Application.Features.Apartment.Queries.Photos.GetApartmentPho
 using BookingClone.Application.Features.Apartment.Queries.SearchApartments;
 using BookingClone.Application.Features.Booking.Queries.GetBookingsForApartment;
 using BookingClone.Application.Features.Booking.Queries.GetBookingsForUser;
+using BookingClone.Application.Features.Review.Queries.GetReviewsForApartment;
 using BookingClone.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -99,7 +100,29 @@ namespace BookingClone.API.Controllers
         [HttpGet("bookings")]
         public async Task<IActionResult> GetBookingsForApartment([FromQuery] BookingSearchParams searchParams)
         {
-            var query = new GetBookingsForApartmentQuery { BookingSearchParams = searchParams };
+            var query = new GetBookingsForApartmentQuery
+            {
+                UserId = User.GetUserId(),
+                BookingSearchParams = searchParams
+            };
+
+            var result = await _sender.Send(query);
+
+            Response.AddPaginationHeader(result.ValueOrDefault);
+
+            return result.ToIActionResult();
+        }
+
+
+        [Authorize(Roles = nameof(AppRole.Owner))]
+        [HttpGet("reviews")]
+        public async Task<IActionResult> GetReviewsForApartment([FromQuery] ReviewSearchParams searchParams)
+        {
+            var query = new GetReviewsForApartmentQuery
+            {
+                UserId = User.GetUserId(),
+                ReviewsSearchParams = searchParams
+            };
 
             var result = await _sender.Send(query);
 

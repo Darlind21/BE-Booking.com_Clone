@@ -21,13 +21,12 @@ namespace BookingClone.Application.Features.Booking.Queries.GetBookingsForApartm
             if (!await apartmentRepository.ApartmentBelongsToOwner(request.BookingSearchParams.ApartmentId!.Value, request.UserId)) 
                 throw new Exception("Apartment with this id does not belong to owner with this user id");
 
-            if (request.BookingSearchParams.ApartmentId == null || request.BookingSearchParams.ApartmentId == default)
-                throw new Exception("Apartment id not provided to get bookings");
-
             var query = bookingRepository.GetBookingsByApartmentId(request.BookingSearchParams);
 
             var projected = query.Select(booking => new BookingResponseDTO
             {
+                BookingId = booking.Id,
+                ApartmentId = booking.ApartmentId,
                 ApartmentName = booking.Apartment.Name,
                 ApartmentAddress = booking.Apartment.Address,
                 CheckinDate = booking.StartDate,

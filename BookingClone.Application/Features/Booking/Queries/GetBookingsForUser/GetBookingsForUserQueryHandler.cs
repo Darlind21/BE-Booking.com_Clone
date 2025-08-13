@@ -26,6 +26,8 @@ namespace BookingClone.Application.Features.Booking.Queries.GetBookingsForUser
 
             var projected = query.Select(booking => new BookingResponseDTO
             {
+                BookingId = booking.Id,
+                ApartmentId = booking.ApartmentId,
                 ApartmentName = booking.Apartment.Name,
                 ApartmentAddress = booking.Apartment.Address,
                 CheckinDate = booking.StartDate,
