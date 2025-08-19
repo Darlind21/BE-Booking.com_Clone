@@ -1,4 +1,5 @@
 ﻿using BookingClone.Application.Common.Interfaces;
+using BookingClone.Application.Interfaces.Repositories;
 using BookingClone.Application.Interfaces.Services;
 using BookingClone.Domain.Entities;
 using BookingClone.Infrastructure.Data;
@@ -14,11 +15,11 @@ using System.Threading.Tasks;
 
 namespace BookingClone.Infrastructure.Services
 {
-    public class OutboxProcessor(BookingDbContext db, IEmailService emailService, ILogger<OutboxProcessor> logger) : IOutboxProcessor
+    public class OutboxProcessor(IOutboxRepository outboxRepository, IEmailService emailService, ILogger<OutboxProcessor> logger) : IOutboxProcessor
     {
         public async Task ProcessSingleMessage(Guid messageId)
         {
-            var message = await db.OutboxMessages.FindAsync(messageId);
+            var message = await outboxRepository.GetByIdAsync(messageId);
             if (message == null || message.ProcessedOnUtc != null || message.RetryCount >= message.MaxRetries)
                 return;
             await ProcessMessage(message);
@@ -27,11 +28,7 @@ namespace BookingClone.Infrastructure.Services
 
         public async Task ProcessPendingMessages(int batchSize = 50)
         {
-            var pendingMessages = await db.OutboxMessages
-                .Where(m => m.ProcessedOnUtc == null && m.RetryCount < m.MaxRetries)
-                .OrderBy(m => m.OccurredOnUtc)
-                .Take(batchSize)
-                .ToListAsync();
+            var pendingMessages = await outboxRepository.GetPendingMessagesAsync(batchSize);
 
             foreach (var message in pendingMessages)
             {
@@ -59,7 +56,7 @@ namespace BookingClone.Infrastructure.Services
                 logger.LogError(ex, "Failed to process OutboxMessage {MessageId}", message.Id);
             }
 
-            await db.SaveChangesAsync();
+            await outboxRepository.SaveChangesAsync();
         }
 
         private record EmailPayload(string To, string Subject, string Body);

@@ -10,7 +10,7 @@ namespace BookingClone.Application.Features.Booking.Commands.CompleteBooking
 {
     public record CompleteBookingsCommand : IRequest<Result>
     {
-        public Guid? BookingId { get; init; }
+        public Guid BookingId { get; init; }
     }
 
 }

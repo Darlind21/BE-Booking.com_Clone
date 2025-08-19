@@ -1,16 +1,20 @@
-﻿using BookingClone.Application.Interfaces.Repositories;
+﻿using BookingClone.Application.Common.Helpers;
+using BookingClone.Application.Common.Interfaces;
+using BookingClone.Application.Interfaces.Repositories;
+using BookingClone.Domain.Entities;
 using FluentResults;
 using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace BookingClone.Application.Features.Booking.Commands.RejectBooking
 {
     public class RejectBookingCommandHandle
-        (IBookingRepository bookingRepository)
+        (IBookingRepository bookingRepository, IOutboxRepository outboxRepository, IJobScheduler jobScheduler)
         : IRequestHandler<RejectBookingCommand, Result>
     {
         public async Task<Result> Handle(RejectBookingCommand request, CancellationToken cancellationToken)
@@ -41,6 +45,17 @@ namespace BookingClone.Application.Features.Booking.Commands.RejectBooking
 
             var updated = await bookingRepository.UpdateAsync(booking);
             if (!updated) throw new Exception("Unable to reject booking at this time");
+
+            var outboxMessage = new OutboxMessage(payload: JsonSerializer.Serialize(new EmailPayload
+            {
+                To = await bookingRepository.GetUserEmailByBookingId(request.BookingId),
+                Subject = "Booking Rejected",
+                Body = $"Your booking was rejected."
+            }));
+
+            await outboxRepository.AddAsync(outboxMessage);
+
+            jobScheduler.EnqueueOutboxMessage(outboxMessage.Id);
 
             return Result.Ok();
         }

@@ -18,40 +18,19 @@ namespace BookingClone.Application.Features.Booking.Commands.CompleteBookings
     {
         public async Task<Result> Handle(CompleteBookingsCommand request, CancellationToken cancellationToken)
         {
-            if (request.BookingId.HasValue)
-            {
-                var booking = await bookingRepository.GetByIdAsync(request.BookingId.Value);
-                if (booking == null) throw new Exception("Unable to complete booking with this id as it does not exist");
+            var booking = await bookingRepository.GetByIdAsync(request.BookingId);
+            if (booking == null) throw new Exception("Unable to complete booking with this id as it does not exist");
 
-                if (booking.Status != BookingStatus.Confirmed)
-                    return Result.Fail("Unable to complete booking as its status is not Confirmed");
+            if (booking.Status != BookingStatus.Confirmed)
+                return Result.Fail("Unable to complete booking as its status is not Confirmed");
 
-                if (booking.EndDate > DateOnly.FromDateTime(DateTime.UtcNow))
-                    return Result.Fail("Cannot complete booking before its end date");
+            if (booking.EndDate > DateOnly.FromDateTime(DateTime.UtcNow))
+                return Result.Fail("Cannot complete booking before its end date");
 
-                booking.CompleteBooking();
+            booking.CompleteBooking();
 
-                var updated = await bookingRepository.UpdateAsync(booking);
-                if (!updated) throw new Exception("Unable to complete booking at this time");
-
-                return Result.Ok();
-            }
-
-
-            var expiredBookings = bookingRepository
-                .GetExpiredBookingsQuery()
-                .ToList();
-
-            if (!expiredBookings.Any())
-                return Result.Ok(); //if there are no expired booking there is nothing to do 
-
-            foreach (var booking in expiredBookings)
-            {
-                booking.CompleteBooking();
-            }
-
-            var saved = await bookingRepository.SaveChangesAsync();
-            if (!saved) throw new Exception("Unable to auto complete bookings");
+            var updated = await bookingRepository.UpdateAsync(booking);
+            if (!updated) throw new Exception("Unable to complete booking at this time");
 
             return Result.Ok();
         }

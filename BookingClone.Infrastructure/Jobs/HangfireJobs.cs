@@ -15,6 +15,12 @@ namespace BookingClone.Infrastructure.Jobs
                 job => job.ProcessPendingEmails(),
                 Cron.Minutely
             );
+
+            RecurringJob.AddOrUpdate<AutocompleteBookingsJob>(
+                job => job.CompleteBookingsAsync(),
+                Cron.MinuteInterval(5)
+            );
+
         }
     }
 }

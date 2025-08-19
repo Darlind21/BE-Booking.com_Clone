@@ -9,5 +9,6 @@ namespace BookingClone.Application.Interfaces.Repositories
 {
     public interface IOutboxRepository : IBaseRepository<OutboxMessage>
     {
+        Task<List<OutboxMessage>> GetPendingMessagesAsync(int batchSizeS);
     }
 }
