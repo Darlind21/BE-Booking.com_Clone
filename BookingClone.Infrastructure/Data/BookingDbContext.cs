@@ -19,6 +19,7 @@ namespace BookingClone.Infrastructure.Data
         public DbSet<Owner> Owners { get; set; }
         public DbSet<Amenity> Amenities { get; set; }
 
+        public DbSet<OutboxMessage> OutboxMessages { get; set; }
 
 
         //to apply our configuration classes that implement IEntityTypeConfiguration<T> we can do it on OnModelCreating()

@@ -1,5 +1,6 @@
 using BookingClone.API.Extensions;
 using BookingClone.Infrastructure.Extensions;
+using BookingClone.Infrastructure.Jobs;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,5 +18,7 @@ var app = builder.Build();
 
 //// Configure the HTTP request pipeline.
 app.UseApiRequestPipeline();
+
+HangfireJobs.ConfigureRecurringJobs();
 
 app.Run();

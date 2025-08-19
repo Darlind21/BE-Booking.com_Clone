@@ -22,7 +22,7 @@ namespace BookingClone.Application.Features.Booking.Commands.CreateBooking
                     .NotEmpty().WithMessage("ApartmentId is required.");
 
                 RuleFor(x => x.CreateBookingDTO.CheckinDate)
-                    .Must(date => date > DateOnly.FromDateTime(DateTime.Today))
+                    .Must(date => date > DateOnly.FromDateTime(DateTime.UtcNow))
                     .WithMessage("Checkin date cannot be today or in the past.");
 
                 RuleFor(x => x.CreateBookingDTO.CheckoutDate)

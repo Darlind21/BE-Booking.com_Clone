@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookingClone.Application.Features.Booking.Commands.ApproveBooking
+namespace BookingClone.Application.Features.Booking.Commands.ConfirmBooking
 {
     public record ConfirmBookingCommand : IRequest<Result>
     {

@@ -1,17 +1,21 @@
-﻿using BookingClone.Application.Features.Booking.Commands.ApproveBooking;
+﻿using BookingClone.Application.Common.Helpers;
+using BookingClone.Application.Common.Interfaces;
+using BookingClone.Application.Features.Booking.Commands.ConfirmBooking;
 using BookingClone.Application.Interfaces.Repositories;
+using BookingClone.Domain.Entities;
 using FluentResults;
 using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace BookingClone.Application.Features.Booking.Commands.ConfirmBooking
 {
     public class ConfirmBookingCommandHandler
-        (IBookingRepository bookingRepository)
+        (IBookingRepository bookingRepository, IOutboxRepository outboxRepository, IJobScheduler jobScheduler)
         : IRequestHandler<ConfirmBookingCommand, Result>
     {
         public async Task<Result> Handle(ConfirmBookingCommand request, CancellationToken cancellationToken)
@@ -42,6 +46,20 @@ namespace BookingClone.Application.Features.Booking.Commands.ConfirmBooking
 
             var updated = await bookingRepository.UpdateAsync(booking);
             if (!updated) throw new Exception("Unable to confirm booking at this time");
+
+
+
+            var outboxMessage = new OutboxMessage(payload: JsonSerializer.Serialize(new EmailPayload
+            {
+                To = await bookingRepository.GetUserEmailByBookingId(request.BookingId),
+                Subject = "Booking Confirmed",
+                Body = $"Your booking is confirmed."
+            }));
+
+            await outboxRepository.AddAsync(outboxMessage);
+
+            //jobScheduler.Enqueue<IOutboxProcessor>(x => x.ProcessSingleMessage(outboxMessage.Id));
+            jobScheduler.EnqueueOutboxMessage(outboxMessage.Id);
 
             return Result.Ok();
         }

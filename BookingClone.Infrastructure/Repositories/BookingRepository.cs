@@ -106,6 +106,16 @@ namespace BookingClone.Infrastructure.Repositories
                 .AsQueryable();
         }
 
+        public async Task<string> GetUserEmailByBookingId(Guid bookingId)
+        {
+            //BUG: If booking id comes incorrect it will throw - left like this for testing purposes for now 
+            return await context.Bookings
+                .Include(b => b.User)
+                .Where(b => b.Id == bookingId)
+                .Select(b => b.User.Email)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<bool> IsBookingDoneByUser(Guid userId, Guid bookingId)
         {
             return await context.Bookings

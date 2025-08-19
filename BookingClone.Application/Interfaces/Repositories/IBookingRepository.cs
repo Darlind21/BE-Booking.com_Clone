@@ -15,5 +15,7 @@ namespace BookingClone.Application.Interfaces.Repositories
         Task<bool> IsBookingDoneByUser(Guid userId, Guid bookingId);
         Task<bool> CanOwnerConfirmOrRejectBooking(Guid userId, Guid bookingId);
         IQueryable<Booking> GetExpiredBookingsQuery();
+
+        Task<string> GetUserEmailByBookingId(Guid bookingId);
     }
 }

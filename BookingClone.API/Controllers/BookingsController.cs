@@ -1,7 +1,7 @@
 ﻿using BookingClone.API.Extensions;
 using BookingClone.Application.Common.DTOs;
 using BookingClone.Application.Common.Helpers;
-using BookingClone.Application.Features.Booking.Commands.ApproveBooking;
+using BookingClone.Application.Features.Booking.Commands.ConfirmBooking;
 using BookingClone.Application.Features.Booking.Commands.CancelBooking;
 using BookingClone.Application.Features.Booking.Commands.CompleteBooking;
 using BookingClone.Application.Features.Booking.Commands.CreateBooking;

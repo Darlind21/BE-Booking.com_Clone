@@ -1,4 +1,5 @@
 ﻿using BookingClone.API.Middleware;
+using Hangfire;
 
 namespace BookingClone.API.Extensions
 {
@@ -22,6 +23,8 @@ namespace BookingClone.API.Extensions
             app.UseAuthorization();
 
             app.MapControllers();
+
+            app.UseHangfireDashboard();
 
             return app;
         }
