@@ -1,5 +1,6 @@
 ﻿using BookingClone.Application.Common.Helpers;
 using BookingClone.Application.Common.Interfaces;
+using BookingClone.Application.Events.Notifications;
 using BookingClone.Application.Features.Booking.Commands.ConfirmBooking;
 using BookingClone.Application.Interfaces.Repositories;
 using BookingClone.Domain.Entities;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 namespace BookingClone.Application.Features.Booking.Commands.ConfirmBooking
 {
     public class ConfirmBookingCommandHandler
-        (IBookingRepository bookingRepository, IOutboxRepository outboxRepository, IJobScheduler jobScheduler)
+        (IBookingRepository bookingRepository, IOutboxRepository outboxRepository, IJobScheduler jobScheduler, IMediator mediator)
         : IRequestHandler<ConfirmBookingCommand, Result>
     {
         public async Task<Result> Handle(ConfirmBookingCommand request, CancellationToken cancellationToken)
@@ -60,6 +61,13 @@ namespace BookingClone.Application.Features.Booking.Commands.ConfirmBooking
 
             //jobScheduler.Enqueue<IOutboxProcessor>(x => x.ProcessSingleMessage(outboxMessage.Id));
             jobScheduler.EnqueueOutboxMessage(outboxMessage.Id);
+
+            await mediator.Publish(new NotificationEvent
+            {
+                UserId = booking.UserId,
+                Title = "Booking Confirmed",
+                Message = $"Your booking for {booking.Apartment.Name} has been confirmed."
+            });
 
             return Result.Ok();
         }

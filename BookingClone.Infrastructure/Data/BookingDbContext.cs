@@ -18,6 +18,7 @@ namespace BookingClone.Infrastructure.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Owner> Owners { get; set; }
         public DbSet<Amenity> Amenities { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         public DbSet<OutboxMessage> OutboxMessages { get; set; }
 

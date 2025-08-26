@@ -1,4 +1,5 @@
 ﻿using BookingClone.API.Middleware;
+using BookingClone.Infrastructure.SignalR.Hubs;
 using Hangfire;
 
 namespace BookingClone.API.Extensions
@@ -23,6 +24,8 @@ namespace BookingClone.API.Extensions
             app.UseAuthorization();
 
             app.MapControllers();
+
+            app.MapHub<NotificationHub>("/hubs/notifications");
 
             app.UseHangfireDashboard();
 

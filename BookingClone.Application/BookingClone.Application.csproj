@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Events\Booking\BookingConfirmed\" />
+    <Folder Include="Events\Booking\BookingRejected\" />
+    <Folder Include="Events\Booking\BookingCompleted\" />
+    <Folder Include="Events\Booking\BookingCancelled\" />
+    <Folder Include="Events\Booking\BookingCreated\" />
+    <Folder Include="Events\Review\ReviewSubmitted\" />
     <Folder Include="Features\Owner\Queries\" />
   </ItemGroup>
 

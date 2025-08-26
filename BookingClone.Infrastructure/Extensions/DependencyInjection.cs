@@ -8,6 +8,7 @@ using BookingClone.Infrastructure.Repositories;
 using BookingClone.Infrastructure.Services;
 using BookingClone.Infrastructure.Services.Cloudinary;
 using BookingClone.Infrastructure.Services.Email;
+using BookingClone.Infrastructure.SignalR.Services;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -35,6 +36,8 @@ namespace BookingClone.Infrastructure.Extensions
             services.AddScoped<IApartmentPhotoRepository, ApartmentPhotoRepository>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
             services.AddScoped<IOutboxRepository, OutboxRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<INotificationService, SignalRNotificationService>();
 
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddScoped<ICloudinaryService, CloudinaryService>();
