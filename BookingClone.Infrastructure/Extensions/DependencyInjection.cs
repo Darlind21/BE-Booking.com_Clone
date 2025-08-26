@@ -37,6 +37,7 @@ namespace BookingClone.Infrastructure.Extensions
             services.AddScoped<IReviewRepository, ReviewRepository>();
             services.AddScoped<IOutboxRepository, OutboxRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddSignalR();
             services.AddScoped<INotificationService, SignalRNotificationService>();
 
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));

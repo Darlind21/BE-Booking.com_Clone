@@ -1,5 +1,6 @@
 ﻿using BookingClone.Application.Common.Helpers;
 using BookingClone.Application.Common.Interfaces;
+using BookingClone.Application.Events.Booking.BookingConfirmed;
 using BookingClone.Application.Events.Notifications;
 using BookingClone.Application.Features.Booking.Commands.ConfirmBooking;
 using BookingClone.Application.Interfaces.Repositories;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 namespace BookingClone.Application.Features.Booking.Commands.ConfirmBooking
 {
     public class ConfirmBookingCommandHandler
-        (IBookingRepository bookingRepository, IOutboxRepository outboxRepository, IJobScheduler jobScheduler, IMediator mediator)
+        (IBookingRepository bookingRepository, IMediator mediator)
         : IRequestHandler<ConfirmBookingCommand, Result>
     {
         public async Task<Result> Handle(ConfirmBookingCommand request, CancellationToken cancellationToken)
@@ -49,24 +50,9 @@ namespace BookingClone.Application.Features.Booking.Commands.ConfirmBooking
             if (!updated) throw new Exception("Unable to confirm booking at this time");
 
 
-
-            var outboxMessage = new OutboxMessage(payload: JsonSerializer.Serialize(new EmailPayload
+            await mediator.Publish(new BookingConfirmedEvent
             {
-                To = await bookingRepository.GetUserEmailByBookingId(request.BookingId),
-                Subject = "Booking Confirmed",
-                Body = $"Your booking is confirmed."
-            }));
-
-            await outboxRepository.AddAsync(outboxMessage);
-
-            //jobScheduler.Enqueue<IOutboxProcessor>(x => x.ProcessSingleMessage(outboxMessage.Id));
-            jobScheduler.EnqueueOutboxMessage(outboxMessage.Id);
-
-            await mediator.Publish(new NotificationEvent
-            {
-                UserId = booking.UserId,
-                Title = "Booking Confirmed",
-                Message = $"Your booking for {booking.Apartment.Name} has been confirmed."
+                Booking = booking
             });
 
             return Result.Ok();
