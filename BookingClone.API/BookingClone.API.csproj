@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BookingClone.Application\BookingClone.Application.csproj" />
     <ProjectReference Include="..\BookingClone.Infrastructure\BookingClone.Infrastructure.csproj" />
+    <ProjectReference Include="..\BookingClone.Shared.Messaging\BookingClone.Shared.Messaging.csproj" />
   </ItemGroup>
 
 </Project>

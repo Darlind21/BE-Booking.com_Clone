@@ -16,7 +16,7 @@ namespace BookingClone.API.Controllers
     {
         private readonly ISender _sender = sender;
 
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<IActionResult> GetNotifications([FromQuery] NotificationsSearchParams searchParams)
         {
             searchParams = searchParams with { UserId = User.GetUserId() };

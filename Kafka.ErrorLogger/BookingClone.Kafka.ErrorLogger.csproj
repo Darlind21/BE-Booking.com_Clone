@@ -1,29 +1,30 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-Kafka.ErrorLogger-9487d554-9b4c-4eff-80b1-8a7cae607998</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CloudinaryDotNet" Version="1.27.6" />
     <PackageReference Include="Confluent.Kafka" Version="2.11.1" />
-    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.21" />
-    <PackageReference Include="Hangfire.Core" Version="1.8.21" />
-    <PackageReference Include="Hangfire.SqlServer" Version="1.8.21" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BookingClone.Application\BookingClone.Application.csproj" />
-    <ProjectReference Include="..\BookingClone.Domain\BookingClone.Domain.csproj" />
+    <ProjectReference Include="..\BookingClone.Shared.Messaging\BookingClone.Shared.Messaging.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\Interfaces\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Shared\" />
+  </ItemGroup>
 </Project>

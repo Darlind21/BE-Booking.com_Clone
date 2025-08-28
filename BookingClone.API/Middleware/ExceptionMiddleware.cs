@@ -1,13 +1,22 @@
-﻿using BookingClone.API.Helpers;
+﻿using BookingClone.API.Extensions;
+using BookingClone.API.Helpers;
+using BookingClone.Application.Interfaces.Kafka;
+using BookingClone.Shared.Messaging.Events.BookingClone.Shared.Messaging;
 using FluentValidation;
+using MediatR;
 using System.Net;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace BookingClone.API.Middleware
 {
     //We create custom Exception middleware because since exceptions may occur (or we throw them) in the application/domain layer,
     //we can catch those and return a standardized ApiException(custom class) dto to the client to avoid leaking internal info (like stack traces)
-    public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IHostEnvironment env)
+    public class ExceptionMiddleware
+        (RequestDelegate next,
+        ILogger<ExceptionMiddleware> logger, 
+        IHostEnvironment env,
+        IErrorEventProducer producer)
     //RequestDelegate is a built-in delegate (a variable that points to a method) that represents a function that can process an http request and returns a Task
         //it is how middleware components call each other in the pipeline
         //we use it so when writing custom middleware to call the next middleware in the pipeline.
@@ -69,6 +78,32 @@ namespace BookingClone.API.Middleware
                 };
 
                 var json = JsonSerializer.Serialize(response, options); //converts the ApiException obj into a JSON string
+
+
+                var errorEvent = new ErrorEvent
+                {
+                    Message = ex.Message,
+                    ExceptionType = ex.GetType().FullName,
+                    StackTrace = ex.StackTrace,
+                    HttpMethod = context.Request.Method,
+                    Path = context.Request.Path,
+                    QueryString = context.Request.QueryString.ToString(),
+                    TraceId = context.TraceIdentifier,
+                    RawJson = json,
+                    Environment = env.EnvironmentName,
+                    Severity = "Error",
+                    UserId = context.User?.Identity?.IsAuthenticated == true ? context.User.GetUserId() : null,
+                    ServiceName = env.ApplicationName
+                };
+
+                try
+                {
+                    await producer.ProduceAsync(errorEvent);
+                }
+                catch (Exception pubEx)
+                {
+                    logger.LogError(pubEx, "Failed to publish error event to Kafka");
+                }
 
                 await context.Response.WriteAsync(json); //writes the json error to the response body so the client can see it 
             }

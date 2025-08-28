@@ -1,9 +1,11 @@
 ﻿using BookingClone.Application.Common.Interfaces;
+using BookingClone.Application.Interfaces.Kafka;
 using BookingClone.Application.Interfaces.Repositories;
 using BookingClone.Application.Interfaces.Services;
 using BookingClone.Infrastructure.Data;
 using BookingClone.Infrastructure.Helpers;
 using BookingClone.Infrastructure.Jobs;
+using BookingClone.Infrastructure.Kafka;
 using BookingClone.Infrastructure.Repositories;
 using BookingClone.Infrastructure.Services;
 using BookingClone.Infrastructure.Services.Cloudinary;
@@ -39,22 +41,20 @@ namespace BookingClone.Infrastructure.Extensions
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddSignalR();
             services.AddScoped<INotificationService, SignalRNotificationService>();
-
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddScoped<ICloudinaryService, CloudinaryService>();
-
             services.AddScoped<IPaginationHelper, PaginationHelper>();
 
 
             var emailSettings = config
                 .GetSection("EmailSettings")
                 .Get<EmailSettings>() ?? throw new Exception("Unable to get EmailSettings from appsettings.json");
-
             //so it's injectable anywhere
             services.AddSingleton(emailSettings);
-
             services.AddScoped<IEmailService> (provider =>
                 new EmailService(emailSettings.SmtpServer, emailSettings.Port, emailSettings.FromEmail, emailSettings.FromPassword));
+
+
 
             services.AddScoped<IOutboxProcessor, OutboxProcessor>();
             services.AddScoped<OutboxEmailJob>();
@@ -62,12 +62,19 @@ namespace BookingClone.Infrastructure.Extensions
 
 
 
-
-
             string connectionString = config.GetConnectionString("DefaultConnection")!;
             services.AddHangfire(config =>
                 config.UseSqlServerStorage(connectionString));
             services.AddHangfireServer();
+
+
+
+            var bootstrapServers = config["Kafka:BootstrapServers"]
+                                   ?? throw new Exception("Kafka:BootstrapServers not found in configuration");
+            var topicName = config["Kafka:TopicName"]
+                            ?? throw new Exception("Kafka:TopicName not found in configuration");
+            services.AddSingleton<IErrorEventProducer>(_ => new KafkaErrorEventProducer(bootstrapServers, topicName));
+
 
 
             return services;

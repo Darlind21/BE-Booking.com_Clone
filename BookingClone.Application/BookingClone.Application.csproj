@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BookingClone.Domain\BookingClone.Domain.csproj" />
+    <ProjectReference Include="..\BookingClone.Shared.Messaging\BookingClone.Shared.Messaging.csproj" />
   </ItemGroup>
 
 </Project>

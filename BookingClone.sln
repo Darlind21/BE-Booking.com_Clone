@@ -13,6 +13,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingClone.Infrastructure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRTestClient", "SignalRTestClient\SignalRTestClient.csproj", "{D2928512-E4F1-4D97-AB6F-0D5E5F83247F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingClone.Kafka.ErrorLogger", "Kafka.ErrorLogger\BookingClone.Kafka.ErrorLogger.csproj", "{04BF0475-F06C-45E1-A368-4864E427203F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingClone.Shared.Messaging", "BookingClone.Shared.Messaging\BookingClone.Shared.Messaging.csproj", "{F621F5DB-359F-4EAE-B4B6-B4A99B7B6170}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +48,14 @@ Global
 		{D2928512-E4F1-4D97-AB6F-0D5E5F83247F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2928512-E4F1-4D97-AB6F-0D5E5F83247F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2928512-E4F1-4D97-AB6F-0D5E5F83247F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04BF0475-F06C-45E1-A368-4864E427203F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04BF0475-F06C-45E1-A368-4864E427203F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04BF0475-F06C-45E1-A368-4864E427203F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04BF0475-F06C-45E1-A368-4864E427203F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F621F5DB-359F-4EAE-B4B6-B4A99B7B6170}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F621F5DB-359F-4EAE-B4B6-B4A99B7B6170}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F621F5DB-359F-4EAE-B4B6-B4A99B7B6170}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F621F5DB-359F-4EAE-B4B6-B4A99B7B6170}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

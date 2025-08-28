@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.1
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181 # The port Zookeeper listens on inside its container.
+      ZOOKEEPER_TICK_TIME: 2000  # Basic Zookeeper timing configuration.
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.1
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"    # host <-> broker (for apps running on host) -- The crucial port map: makes Kafka available on localhost:9092
+      - "29092:29092"  # inter-container listener (for clients inside Docker)
+    environment:
+      KAFKA_BROKER_ID: 1    
+      # Unique ID for each broker in a cluster
+
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181 
+      # How Kafka finds Zookeeper (using Docker's DNS).
+
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,HOST:PLAINTEXT 
+      # Creates two listener names: DOCKER and HOST, both using non-secure connections.
+
+      KAFKA_ADVERTISED_LISTENERS: DOCKER://kafka:29092,HOST://localhost:9092
+      # Tell internal containers to connect via 'kafka:29092'. Tell the host machine to connect via 'localhost:9092'.
+
+      KAFKA_LISTENERS: DOCKER://0.0.0.0:29092,HOST://0.0.0.0:9092
+      # Listen on port 29092 for DOCKER traffic and 9092 for HOST traffic.
+
+      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
+      # Use the DOCKER listener for communication between brokers.
+
+      # --- Settings for a Single Broker (Dev) ---
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      # These allow topics to be created with a single replica, which is fine for development.
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+    ports:
+      - "8080:8080"

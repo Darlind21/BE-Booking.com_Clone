@@ -17,5 +17,6 @@ namespace BookingClone.Application.Interfaces.Repositories
         IQueryable<Booking> GetExpiredBookingsQuery();
 
         Task<string> GetUserEmailByBookingId(Guid bookingId);
+        //Task<Owner> GetOwnerInfoByBookingId(Guid bookingId);
     }
 }
