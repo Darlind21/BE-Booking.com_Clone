@@ -13,6 +13,8 @@ namespace BookingClone.Infrastructure.SignalR.Services
     public class SignalRNotificationService(IHubContext<NotificationHub> hubContext) : INotificationService
     {
         private readonly IHubContext<NotificationHub> _hubContext = hubContext;
+        //IHubContext<NotificationHub> is a long-lived entry point that lets backgroud services, controllers, event handlers, etc,
+        //talk to all connected clients(or groups) without having to be inside a hub instance 
 
         public async Task SendNotificationAsync(string userId, NotificationDTO notification)
         {

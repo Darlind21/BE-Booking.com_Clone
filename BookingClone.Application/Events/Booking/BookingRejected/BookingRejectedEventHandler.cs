@@ -1,3 +1,4 @@
+using BookingClone.Application.Common.DTOs;
 using BookingClone.Application.Common.Helpers;
 using BookingClone.Application.Common.Interfaces;
 using BookingClone.Application.Events.Notifications;
@@ -15,23 +16,42 @@ namespace BookingClone.Application.Events.Booking.BookingRejected
         IBookingRepository bookingRepository,
         IOutboxRepository outboxRepository,
         IJobScheduler jobScheduler,
-        IMediator mediator)
+        INotificationRepository notificationRepository,
+        INotificationService notificationService)
         : INotificationHandler<BookingRejectedEvent>
     {
         public async Task Handle(BookingRejectedEvent notification, CancellationToken cancellationToken)
         {
-            await mediator.Publish(new NotificationEvent
+            var dbNotification = new Notification(
+                notification.Booking.UserId,
+                "Booking Rejected",
+                "Your booking was rejected"
+            );
+
+            await notificationRepository.AddAsync(dbNotification);
+
+            var notificationDto = new NotificationDTO
             {
-                UserId = notification.Booking.UserId,
-                Title = "Booking Rejected",
-                Message = $"Your booking has been rejected."
-            }, cancellationToken);
+                Id = dbNotification.Id,
+                Title = dbNotification.Title,
+                Message = dbNotification.Message,
+                IsRead = false,
+                CreatedOnUtc = dbNotification.CreatedOnUtc
+            };
+
+            await notificationService.SendNotificationAsync(
+                dbNotification.UserId.ToString(),
+                notificationDto
+            );
+
+
+
 
             var outboxMessage = new OutboxMessage(payload: JsonSerializer.Serialize(new EmailPayload
             {
                 To = await bookingRepository.GetUserEmailByBookingId(notification.Booking.Id),
-                Subject = "Booking Rejected",
-                Body = $"Your booking was rejected."
+                Subject = "Booking was rejected",
+                Body = $"Your booking is rejected."
             }));
 
             await outboxRepository.AddAsync(outboxMessage);

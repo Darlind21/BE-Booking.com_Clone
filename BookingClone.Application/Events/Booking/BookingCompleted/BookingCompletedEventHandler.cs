@@ -1,3 +1,4 @@
+using BookingClone.Application.Common.DTOs;
 using BookingClone.Application.Common.Helpers;
 using BookingClone.Application.Common.Interfaces;
 using BookingClone.Application.Events.Notifications;
@@ -15,23 +16,42 @@ namespace BookingClone.Application.Events.Booking.BookingCompleted
         IBookingRepository bookingRepository,
         IOutboxRepository outboxRepository,
         IJobScheduler jobScheduler,
-        IMediator mediator)
+        INotificationRepository notificationRepository,
+        INotificationService notificationService)
         : INotificationHandler<BookingCompletedEvent>
     {
         public async Task Handle(BookingCompletedEvent notification, CancellationToken cancellationToken)
         {
-            await mediator.Publish(new NotificationEvent
+            var dbNotification = new Notification(
+                notification.Booking.UserId,
+                "Booking Completed",
+                "Your booking was completed. Feel free to leave a review!"
+            );
+
+            await notificationRepository.AddAsync(dbNotification);
+
+            var notificationDto = new NotificationDTO
             {
-                UserId = notification.Booking.UserId,
-                Title = "Booking Completed",
-                Message = $"Your booking has been marked as completed."
-            }, cancellationToken);
+                Id = dbNotification.Id,
+                Title = dbNotification.Title,
+                Message = dbNotification.Message,
+                IsRead = false,
+                CreatedOnUtc = dbNotification.CreatedOnUtc
+            };
+
+            await notificationService.SendNotificationAsync(
+                dbNotification.UserId.ToString(),
+                notificationDto
+            );
+
+
+
 
             var outboxMessage = new OutboxMessage(payload: JsonSerializer.Serialize(new EmailPayload
             {
                 To = await bookingRepository.GetUserEmailByBookingId(notification.Booking.Id),
                 Subject = "Booking Completed",
-                Body = $"Your booking has been completed."
+                Body = $"Your booking is completed. Feel free to leave a review!"
             }));
 
             await outboxRepository.AddAsync(outboxMessage);

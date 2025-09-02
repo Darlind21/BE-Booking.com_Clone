@@ -1,9 +1,11 @@
-﻿using BookingClone.Application.Common.Helpers;
+﻿using BookingClone.Application.Common.DTOs;
+using BookingClone.Application.Common.Helpers;
 using BookingClone.Application.Common.Interfaces;
 using BookingClone.Application.Events.Booking.BookingConfirmed;
 using BookingClone.Application.Events.Notifications;
 using BookingClone.Application.Features.Booking.Commands.ConfirmBooking;
 using BookingClone.Application.Interfaces.Repositories;
+using BookingClone.Application.Interfaces.Services;
 using BookingClone.Domain.Entities;
 using FluentResults;
 using MediatR;
@@ -17,7 +19,14 @@ using System.Threading.Tasks;
 namespace BookingClone.Application.Features.Booking.Commands.ConfirmBooking
 {
     public class ConfirmBookingCommandHandler
-        (IBookingRepository bookingRepository, IMediator mediator)
+        (
+        IBookingRepository bookingRepository,
+        //IPublisher publisher
+        IOutboxRepository outboxRepository,
+        IJobScheduler jobScheduler,
+        INotificationService notificationService,
+        INotificationRepository notificationRepository
+        )
         : IRequestHandler<ConfirmBookingCommand, Result>
     {
         public async Task<Result> Handle(ConfirmBookingCommand request, CancellationToken cancellationToken)
@@ -50,10 +59,52 @@ namespace BookingClone.Application.Features.Booking.Commands.ConfirmBooking
             if (!updated) throw new Exception("Unable to confirm booking at this time");
 
 
-            await mediator.Publish(new BookingConfirmedEvent
+            //await publisher.Publish(new BookingConfirmedEvent
+            //{
+            //    Booking = booking
+            //});
+
+
+
+            var outboxMessage = new OutboxMessage(payload: JsonSerializer.Serialize(new EmailPayload
             {
-                Booking = booking
-            });
+                To = await bookingRepository.GetUserEmailByBookingId(request.BookingId),
+                Subject = "Booking Confirmed",
+                Body = $"Your booking is confirmed."
+            }));
+
+            await outboxRepository.AddAsync(outboxMessage);
+
+            //jobScheduler.Enqueue<IOutboxProcessor>(x => x.ProcessSingleMessage(outboxMessage.Id));
+            jobScheduler.EnqueueOutboxMessage(outboxMessage.Id);
+
+
+
+
+            var dbNotification = new Notification(
+                booking.UserId,
+                "Booking Confirmed",
+                "Your booking was confirmed"
+            );
+
+            await notificationRepository.AddAsync(dbNotification);
+
+            var notificationDto = new NotificationDTO
+            {
+                Id = dbNotification.Id,
+                Title = dbNotification.Title,
+                Message = dbNotification.Message,
+                IsRead = false,
+                CreatedOnUtc = dbNotification.CreatedOnUtc
+            };
+
+            await notificationService.SendNotificationAsync(
+                dbNotification.UserId.ToString(),
+                notificationDto
+            );
+
+
+
 
             return Result.Ok();
         }

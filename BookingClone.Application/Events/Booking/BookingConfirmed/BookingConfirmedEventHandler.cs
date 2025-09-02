@@ -1,3 +1,4 @@
+using BookingClone.Application.Common.DTOs;
 using BookingClone.Application.Common.Helpers;
 using BookingClone.Application.Common.Interfaces;
 using BookingClone.Application.Events.Notifications;
@@ -15,17 +16,34 @@ namespace BookingClone.Application.Events.Booking.BookingConfirmed
         IBookingRepository bookingRepository,
         IOutboxRepository outboxRepository,
         IJobScheduler jobScheduler,
-        IMediator mediator)
+        INotificationRepository notificationRepository,
+        INotificationService notificationService)
         : INotificationHandler<BookingConfirmedEvent>
     {
         public async Task Handle(BookingConfirmedEvent notification, CancellationToken cancellationToken)
         {
-            await mediator.Publish(new NotificationEvent
+            var dbNotification = new Notification(
+                notification.Booking.UserId,
+                "Booking Confirmed",
+                "Your booking was confirmed"
+            );
+
+            await notificationRepository.AddAsync(dbNotification);
+
+            var notificationDto = new NotificationDTO
             {
-                UserId = notification.Booking.UserId,
-                Title = "Booking Confirmed",
-                Message = $"Your booking has been confirmed."
-            }, cancellationToken);
+                Id = dbNotification.Id,
+                Title = dbNotification.Title,
+                Message = dbNotification.Message,
+                IsRead = false,
+                CreatedOnUtc = dbNotification.CreatedOnUtc
+            };
+
+            await notificationService.SendNotificationAsync(
+                dbNotification.UserId.ToString(),
+                notificationDto
+            );
+
 
 
 

@@ -21,9 +21,27 @@ namespace BookingClone.Infrastructure.Kafka
 
             var config = new ProducerConfig
             {
-                BootstrapServers = bootstrapServers,
-                ClientId = "BookingClone.Api",
-                Acks = Acks.All
+                BootstrapServers = bootstrapServers, 
+                // is the address of kafka cluster(the initial entry point).
+                // A kafka cluster is a group of servers(called brokers) that work together to provide a distributed, fault-tolerat and scalable messaging system.
+                //Once connected kafka automatically shares the cluster metadata e.g. how many brokers exist, what topics exist, how partitions are distributed etc.
+
+                /*What makes up a kafka cluster? 
+                 * 1.Brokers(servers running kafka)
+                 * -each broker is identified by an Id
+                 * -stores data for partitions and handles producer/consumer requests
+                 * -typically a cluster has 3+ brokers for redundancy
+                 * 2.Topics and Partitions
+                 * -topic = logical channel e.g error-logs
+                 * -a topic is divided into partitions.( Every topic is split into one or more partitions. Each partition is an ordered, immutable sequence of messages that is continually appended to) 
+                 * 3.Replication
+                 * -each partition is replicated to mtp brokers 
+                 * -one replica is the leader, others are followers,
+                 * -producers/consumers talk to leaders; followers are backup
+                 */
+
+                ClientId = "BookingClone.Api", //idetifies the producer
+                Acks = Acks.All //means the produce call waits for all in-sync replicas to ackowledge that they got the message
             };
 
             _producer = new ProducerBuilder<string, string>(config).Build();

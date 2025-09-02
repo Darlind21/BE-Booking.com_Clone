@@ -1,8 +1,15 @@
 version: '3.8'
+#This is a declarative file that tells Docker: “start these containers, connect them together, set these environment variables and port mappings.A tool that lets you run multiple containers together, with one command
+#This file is a Docker Compose configuration (version 3.8) that starts three services on your machine:
+#Zookeeper — required by this Kafka distribution to coordinate the cluster.
+#Kafka broker — the message broker your API (producer) and Worker (consumer) talk to.
+#kafka-ui — a web UI to inspect topics, messages and consumer groups.
 
-services:
+
+services: 
+#This is the section where you define all the containers you want Docker Compose to run together.
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.4.1
+    image: confluentinc/cp-zookeeper:7.4.1 #a docker image is like a blueprint or template... it contains everything needed to to run a piece of software 
     container_name: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181 # The port Zookeeper listens on inside its container.

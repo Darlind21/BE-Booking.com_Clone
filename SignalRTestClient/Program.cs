@@ -8,19 +8,32 @@ const string apiBaseUrl = "https://localhost:7077";
 const string loginEmail = "darlind21@icloud.com";
 const string loginPassword = "Pa$$w0rd";
 
-//Global HTTP client ---
+
 var httpClient = new HttpClient { BaseAddress = new Uri(apiBaseUrl) };
 string? jwtToken = null;
 
 
+Console.WriteLine("Waiting 10 seconds for API to start...\n");
+await Task.Delay(10000); // 10 seconds delay for api to start
 
 
-    Console.WriteLine("Waiting 10 seconds for API to start...\n");
-    await Task.Delay(10000); // 10 seconds delay for api to start
+HubConnection? connection = null;
+
+
+jwtToken = await LoginAndGetToken();
+await ConnectToSignalR(jwtToken);
+
+
+// Keep app running to listen for notifications
+Console.WriteLine("\nPress ENTER to exit...\n");
+Console.ReadLine();
+
+await connection!.DisposeAsync();
 
 
 
-//Login and get JWT ---
+
+
 async Task<string> LoginAndGetToken()
 {
     var loginPayload = new
@@ -44,8 +57,8 @@ async Task<string> LoginAndGetToken()
     return token!;
 }
 
-//Setup SignalR connection ---
-HubConnection? connection = null;
+
+
 
 async Task ConnectToSignalR(string token)
 {
@@ -54,7 +67,7 @@ async Task ConnectToSignalR(string token)
     connection = new HubConnectionBuilder()
         .WithUrl(hubUrl, options =>
         {
-            options.AccessTokenProvider = () => Task.FromResult(token);
+            options.AccessTokenProvider = () => Task.FromResult(token)!;
         })
         .WithAutomaticReconnect()
         .Build();
@@ -65,17 +78,13 @@ async Task ConnectToSignalR(string token)
         Console.WriteLine(JsonSerializer.Serialize(notification, new JsonSerializerOptions { WriteIndented = true }));
     });
 
-    await connection.StartAsync();
-    Console.WriteLine("\nConnected to SignalR hub. Listening for notifications...\n");
+    try
+    {
+        await connection.StartAsync();
+        Console.WriteLine("Connected");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Failed to connect: {ex.Message}");
+    }
 }
-
-
-jwtToken = await LoginAndGetToken();
-await ConnectToSignalR(jwtToken);
-
-
-// Keep app running to listen for notifications
-Console.WriteLine("\nPress ENTER to exit...\n");
-Console.ReadLine();
-
-await connection!.DisposeAsync();
